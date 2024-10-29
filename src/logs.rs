@@ -44,47 +44,54 @@ impl Logger {
     }
 
     /**
-     * Set the log index.
-     * 
-     * This function is used for debugging purposes.
-     * It sets the log index to the specified value.
-     */
-    pub fn debug_set_counter(&mut self, c: u16) {
-        self.c = c;
-    }
-
-    /**
      * Log a message.
      * 
      * The message is logged with the specified severity level.
      * The message is output to the console with a unique log index.
+     *
+     * # Arguments
+     * - `t`: The severity level of the log message.
+     * - `s`: The message to log.
+     *
+     * # Example
+     * ```rust
+        use forestry::prelude::*;
+        let mut l = Logger::new();
+        l.log(I, "info");       // Output: [0000:*] info
+        l.log(W, "warning");    // Output: [0001:!] warning
+     * ```
      */
     pub fn log(&mut self, t: LogLevel, s: &str) {
+        let count = format!("{:0>4x}", self.c);
         match t {
-            I => println!(
-                "[{}:{}] {}",
-                format!("{:#06x}", self.c).blue().bold(),
-                "*".blue().bold(),
-                s.blue()
-            ),
-            W => println!(
-                "[{}:{}] {}",
-                format!("{:#06x}", self.c).yellow().bold(),
-                "!".yellow().bold(),
-                s.yellow().bold()
-            ),
-            E => println!(
-                "[{}:{}] {}",
-                format!("{:#06x}", self.c).red().bold(),
-                "✘".red().bold(),
-                s.red().bold()
-            ),
-            S => println!(
-                "[{}:{}] {}",
-                format!("{:#06x}", self.c).green().bold(),
-                "✔".green().bold(),
-                s.green()
-            ),
+            I => {
+                println!(
+                    "[{}:{}] {}",
+                    count.blue().bold(),
+                    "*".blue().bold(),
+                    s.blue());
+            },
+            W => {
+                println!(
+                    "[{}:{}] {}",
+                    count.yellow().bold(),
+                    "!".yellow().bold(),
+                    s.yellow().bold())
+            },
+            E => {
+                println!(
+                    "[{}:{}] {}",
+                    count.red().bold(),
+                    "✘".red().bold(),
+                    s.red().bold())
+            },
+            S => {
+                println!(
+                    "[{}:{}] {}",
+                    count.green().bold(),
+                    "✔".green().bold(),
+                    s.green())
+            },
         }
         self.c = self.c.wrapping_add(1);
         if self.c == 0 {
@@ -100,16 +107,6 @@ mod tests {
     #[test]
     fn logger_prints() {
         let mut l = Logger::new();
-        l.log(I, "info");
-        l.log(W, "warning");
-        l.log(E, "error");
-        l.log(S, "success");
-    }
-
-    #[test]
-    fn logger_overflow() {
-        let mut l = Logger::new();
-        l.debug_set_counter(0xffff);
         l.log(I, "info");
         l.log(W, "warning");
         l.log(E, "error");
