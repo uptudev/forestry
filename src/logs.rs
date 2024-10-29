@@ -7,9 +7,7 @@ use colored::*;
  * The messages are coloured based on their severity level.
  * Logs are output with a unique 16-bit log index.
  */
-pub struct Logger {
-    c: u16,
-}
+pub struct Logger(u16);
 
 impl Logger {
     /**
@@ -18,7 +16,7 @@ impl Logger {
      * The logger is initialised with a log index of 0.
      */
     pub fn new() -> Self {
-        Logger { c: 0 }
+        Logger(0)
     }
 
     /**
@@ -37,14 +35,14 @@ impl Logger {
      * ```
      */
     pub fn i(&mut self, s: &str) {
-        let count = format!("{:0>4x}", self.c);
+        let count = format!("{:0>4x}", self.0);
         println!(
             "[{}:{}] {}",
             count.blue().bold(),
             "*".blue().bold(),
             s.blue());
-        self.c = self.c.wrapping_add(1);
-        if self.c == 0 {
+        self.0 = self.0.wrapping_add(1);
+        if self.0 == 0 {
             self.w("Log index overflowed; log index may be inaccurate.");
         }
     }
@@ -65,14 +63,14 @@ impl Logger {
      * ```
      */
     pub fn w(&mut self, s: &str) {
-        let count = format!("{:0>4x}", self.c);
+        let count = format!("{:0>4x}", self.0);
         println!(
             "[{}:{}] {}",
             count.yellow().bold(),
             "!".yellow().bold(),
             s.yellow().bold());
-        self.c = self.c.wrapping_add(1);
-        if self.c == 0 {
+        self.0 = self.0.wrapping_add(1);
+        if self.0 == 0 {
             self.w("Log index overflowed; log index may be inaccurate.");
         }
     }
@@ -93,14 +91,14 @@ impl Logger {
      * ```
      */
     pub fn e(&mut self, s: &str) {
-        let count = format!("{:0>4x}", self.c);
+        let count = format!("{:0>4x}", self.0);
         println!(
             "[{}:{}] {}",
             count.red().bold(),
             "✘".red().bold(),
             s.red().bold());
-        self.c = self.c.wrapping_add(1);
-        if self.c == 0 {
+        self.0 = self.0.wrapping_add(1);
+        if self.0 == 0 {
             self.w("Log index overflowed; log index may be inaccurate.");
         }
     }
@@ -121,14 +119,14 @@ impl Logger {
      * ```
      */
     pub fn s(&mut self, s: &str) {
-        let count = format!("{:0>4x}", self.c);
+        let count = format!("{:0>4x}", self.0);
         println!(
             "[{}:{}] {}",
             count.green().bold(),
             "✔".green().bold(),
             s.green());
-        self.c = self.c.wrapping_add(1);
-        if self.c == 0 {
+        self.0 = self.0.wrapping_add(1);
+        if self.0 == 0 {
             self.w("Log index overflowed; log index may be inaccurate.");
         }
     }
