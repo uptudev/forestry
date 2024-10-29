@@ -11,28 +11,6 @@ pub struct Logger {
     c: u16,
 }
 
-/**
- * The severity level of the log message.
- * 
- * I: Info
- * W: Warn
- * E: Error
- * S: Success
- */
-pub enum LogLevel {
-    /**
-     * Info
-     * 
-     * The log message is for general informational purposes.
-     * It is prefaced with an asterisk and coloured blue.
-     */
-    I,
-    W,
-    E,
-    S,
-}
-pub use LogLevel::*;
-
 impl Logger {
     /**
      * Create a new logger.
@@ -45,57 +23,113 @@ impl Logger {
 
     /**
      * Log a message.
-     * 
-     * The message is logged with the specified severity level.
-     * The message is output to the console with a unique log index.
+     *
+     * The message is logged as an INFO message.
      *
      * # Arguments
-     * - `t`: The severity level of the log message.
      * - `s`: The message to log.
      *
      * # Example
      * ```rust
         use forestry::prelude::*;
         let mut l = Logger::new();
-        l.log(I, "info");       // Output: [0000:*] info
-        l.log(W, "warning");    // Output: [0001:!] warning
+        l.i("info");            // Output: [0000:*] info
      * ```
      */
-    pub fn log(&mut self, t: LogLevel, s: &str) {
+    pub fn i(&mut self, s: &str) {
         let count = format!("{:0>4x}", self.c);
-        match t {
-            I => {
-                println!(
-                    "[{}:{}] {}",
-                    count.blue().bold(),
-                    "*".blue().bold(),
-                    s.blue());
-            },
-            W => {
-                println!(
-                    "[{}:{}] {}",
-                    count.yellow().bold(),
-                    "!".yellow().bold(),
-                    s.yellow().bold())
-            },
-            E => {
-                println!(
-                    "[{}:{}] {}",
-                    count.red().bold(),
-                    "✘".red().bold(),
-                    s.red().bold())
-            },
-            S => {
-                println!(
-                    "[{}:{}] {}",
-                    count.green().bold(),
-                    "✔".green().bold(),
-                    s.green())
-            },
-        }
+        println!(
+            "[{}:{}] {}",
+            count.blue().bold(),
+            "*".blue().bold(),
+            s.blue());
         self.c = self.c.wrapping_add(1);
         if self.c == 0 {
-            self.log(W, "Log index overflowed; log index may be inaccurate.");
+            self.w("Log index overflowed; log index may be inaccurate.");
+        }
+    }
+
+    /**
+     * Log a message.
+     * 
+     * The message is logged as a WARN message.
+     *
+     * # Arguments
+     * - `s`: The message to log.
+     *
+     * # Example
+     * ```rust
+        use forestry::prelude::*;
+        let mut l = Logger::new();
+        l.w("warn");            // Output: [0000:!] warn
+     * ```
+     */
+    pub fn w(&mut self, s: &str) {
+        let count = format!("{:0>4x}", self.c);
+        println!(
+            "[{}:{}] {}",
+            count.yellow().bold(),
+            "!".yellow().bold(),
+            s.yellow().bold());
+        self.c = self.c.wrapping_add(1);
+        if self.c == 0 {
+            self.w("Log index overflowed; log index may be inaccurate.");
+        }
+    }
+
+    /**
+     * Log a message.
+     * 
+     * The message is logged as an ERROR message.
+     *
+     * # Arguments
+     * - `s`: The message to log.
+     *
+     * # Example
+     * ```rust
+        use forestry::prelude::*;
+        let mut l = Logger::new();
+        l.e("error");           // Output: [0000:✘] error
+     * ```
+     */
+    pub fn e(&mut self, s: &str) {
+        let count = format!("{:0>4x}", self.c);
+        println!(
+            "[{}:{}] {}",
+            count.red().bold(),
+            "✘".red().bold(),
+            s.red().bold());
+        self.c = self.c.wrapping_add(1);
+        if self.c == 0 {
+            self.w("Log index overflowed; log index may be inaccurate.");
+        }
+    }
+
+    /**
+     * Log a message.
+     * 
+     * The message is logged as a SUCCESS message.
+     *
+     * # Arguments
+     * - `s`: The message to log.
+     *
+     * # Example
+     * ```rust
+        use forestry::prelude::*;
+        let mut l = Logger::new();
+        l.s("success");         // Output: [0000:✔] success
+     * ```
+     */
+    pub fn s(&mut self, s: &str) {
+        let count = format!("{:0>4x}", self.c);
+        println!(
+            "[{}:{}] {}",
+            count.green().bold(),
+            "✔".green().bold(),
+            s.green());
+        self.c = self.c.wrapping_add(1);
+        if self.c == 0 {
+            self.w("Log index overflowed; log index may be inaccurate.");
         }
     }
 }
@@ -107,9 +141,9 @@ mod tests {
     #[test]
     fn logger_prints() {
         let mut l = Logger::new();
-        l.log(I, "info");
-        l.log(W, "warning");
-        l.log(E, "error");
-        l.log(S, "success");
+        l.i("info");
+        l.w("warning");
+        l.e("error");
+        l.s("success");
     }
 }
