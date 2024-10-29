@@ -30,10 +30,10 @@ Forestry is a simple logging library that allows you to log messages to the cons
 use forestry::prelude::*;
 
 let l = Logger::new();
-l.log(I, "This is an info message.");
-l.log(W, "This is a warning message.");
-l.log(E, "This is an error message.");
-l.log(S, "This is a success message.");
+l.i("This is an info message.");
+l.w("This is a warning message.");
+l.e("This is an error message.");
+l.s("This is a success message.");
 ```
 
 ## Contributing
