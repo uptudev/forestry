@@ -9,7 +9,6 @@ homepage = "https://github.com/uptudev/forestry"
 repository = "https://github.com/uptudev/forestry"
 readme = "README.md"
 keywords = ["logging", "cli", "console", "color", "string"]
-rust-version = "1.82.0"
 
 [features]
 plain = ["colored/no-color"]
