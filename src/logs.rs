@@ -60,6 +60,7 @@ impl Logger {
                 LogLevel::Warn => "~".into(),
                 LogLevel::Error => "!".into(),
                 LogLevel::Success => "+".into(),
+                LogLevel::Critical => "%".into(),
             };
         }
         if self.1 & 0b0100 == 0 {
@@ -79,6 +80,10 @@ impl Logger {
                 LogLevel::Success => {
                     cnt = cnt.green();
                     sym = sym.green();
+                },
+                LogLevel::Critical => {
+                    cnt = cnt.on_red().white();
+                    sym = sym.on_red().white();
                 },
             }
         }
