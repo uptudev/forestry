@@ -34,6 +34,7 @@ l.i("This is an info message.");
 l.w("This is a warning message.");
 l.e("This is an error message.");
 l.s("This is a success message.");
+l.c("This is a critical message.");
 ```
 
 These calls can also be inlined as follows
@@ -43,9 +44,10 @@ use forestry::prelude::*
 
 let l = Logger::new();
 l.i("This is an info message.")
-.w("This is a warning message.")
-.e("This is an error message.")
-.s("This is a success message.");
+    .w("This is a warning message.")
+    .e("This is an error message.")
+    .s("This is a success message.")
+    .c("This is a critical message.");
 ```
 
 This will output the following to the console:
@@ -55,6 +57,7 @@ This will output the following to the console:
 [0001:~] This is a warning message.
 [0002:!] This is an error message.
 [0003:+] This is a success message.
+[0004:%] This is a critical message.
 ```
 
 It will also be coloured in most terminals.
