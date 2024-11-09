@@ -150,8 +150,8 @@ impl Logger {
         # Example
         ```rust
          use forestry::prelude::*;
-         let mut l = Logger::new();
-         l.info("info");            // Output: [0000:*] info
+         let mut log = Logger::new();
+         log.info("info");            // Output: [0000:*] info
         ```
      */
     pub fn info(&mut self, s: &str) -> &mut Self {
@@ -176,8 +176,8 @@ impl Logger {
         # Example
         ```rust
          use forestry::prelude::*;
-         let mut l = Logger::new();
-         l.warn("warn");            // Output: [0000:~] warn
+         let mut log = Logger::new();
+         log.warn("warn");            // Output: [0000:~] warn
         ```
      */
     pub fn warn(&mut self, s: &str) -> &mut Self {
@@ -202,8 +202,8 @@ impl Logger {
         # Example
         ```rust
          use forestry::prelude::*;
-         let mut l = Logger::new();
-         l.error("error");           // Output: [0000:!] error
+         let mut log = Logger::new();
+         log.error("error");           // Output: [0000:!] error
         ```
      */
     pub fn error(&mut self, s: &str) -> &mut Self {
@@ -228,8 +228,8 @@ impl Logger {
         # Example
         ```rust
          use forestry::prelude::*;
-         let mut l = Logger::new();
-         l.success("success");         // Output: [0000:+] success
+         let mut log = Logger::new();
+         log.success("success");         // Output: [0000:+] success
         ```
      */
     pub fn success(&mut self, s: &str) -> &mut Self {
@@ -254,8 +254,8 @@ impl Logger {
         # Example
         ```rust
          use forestry::prelude::*;
-         let mut l = Logger::new();
-         l.critical("critical");        // Output: [0000:%] critical
+         let mut log = Logger::new();
+         log.critical("critical");        // Output: [0000:%] critical
         ```
     */
     pub fn critical(&mut self, s: &str) -> &mut Self {
@@ -273,13 +273,13 @@ impl Logger {
 /**
     Formatting options for the `Logger`.
     
-    * `NoIndex`: Removes the incrementing log index.
-    * `NoSymbol`: Removes the log type symbol.
-    * `NoColor`: Removes all colour sequences.
-    * `NoBold`: Removes all bold sequences.
-    * `Plain`: Removes all formatting escape characters.
-    * `Basic`: Turns this into a bare `println!()` call.
-    * `Reset`: Resets the logger's formatter to default settings.
+    - `NoIndex`: Removes the incrementing log index.
+    - `NoSymbol`: Removes the log type symbol.
+    - `NoColor`: Removes all colour sequences.
+    - `NoBold`: Removes all bold sequences.
+    - `Plain`: Removes all formatting escape characters.
+    - `Basic`: Turns this into a bare `println!()` call.
+    - `Reset`: Resets the logger's formatter to default settings.
  */
 #[derive(Copy, Clone)]
 pub enum FormatOptions {

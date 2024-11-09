@@ -29,12 +29,12 @@ Forestry is a simple logging library that allows you to log messages to the cons
 ```rust
 use forestry::prelude::*;
 
-let l = Logger::new();
-l.info("This is an info message.");
-l.warn("This is a warning message.");
-l.error("This is an error message.");
-l.success("This is a success message.");
-l.critical("This is a critical message.");
+let log = Logger::new();
+log.info("This is an info message.");
+log.warn("This is a warning message.");
+log.error("This is an error message.");
+log.success("This is a success message.");
+log.critical("This is a critical message.");
 ```
 
 These calls can also be inlined as follows
@@ -42,8 +42,8 @@ These calls can also be inlined as follows
 ```rust
 use forestry::prelude::*
 
-let l = Logger::new();
-l.info("This is an info message.")
+let log = Logger::new();
+log.info("This is an info message.")
     .warn("This is a warning message.")
     .error("This is an error message.")
     .success("This is a success message.")
