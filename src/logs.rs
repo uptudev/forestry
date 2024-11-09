@@ -166,7 +166,7 @@ impl Logger {
         ```rust
          use forestry::prelude::*;
          let mut l = Logger::new();
-         l.w("warn");            // Output: [0000:!] warn
+         l.w("warn");            // Output: [0000:~] warn
         ```
      */
     pub fn w(&mut self, s: &str) -> &mut Self {
@@ -192,7 +192,7 @@ impl Logger {
         ```rust
          use forestry::prelude::*;
          let mut l = Logger::new();
-         l.e("error");           // Output: [0000:✘] error
+         l.e("error");           // Output: [0000:!] error
         ```
      */
     pub fn e(&mut self, s: &str) -> &mut Self {
@@ -218,7 +218,7 @@ impl Logger {
         ```rust
          use forestry::prelude::*;
          let mut l = Logger::new();
-         l.s("success");         // Output: [0000:✔] success
+         l.s("success");         // Output: [0000:+] success
         ```
      */
     pub fn s(&mut self, s: &str) -> &mut Self {
