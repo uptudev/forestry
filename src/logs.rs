@@ -157,7 +157,7 @@ impl Logger {
     pub fn info(&mut self, s: &str) -> &mut Self {
         let header = self.fmt_header(LogLevel::Info);
         let string = self.fmt_string(LogLevel::Info, s);
-        println!("{}{}", header, string);
+        eprintln!("{}{}", header, string);
         self.0 = self.0.wrapping_add(1);
         if self.0 == 0 {
             self.warn("Log index overflowed; log index may be inaccurate.");
@@ -183,7 +183,7 @@ impl Logger {
     pub fn warn(&mut self, s: &str) -> &mut Self {
         let header = self.fmt_header(LogLevel::Warn);
         let string = self.fmt_string(LogLevel::Warn, s);
-        println!("{}{}", header, string);
+        eprintln!("{}{}", header, string);
         self.0 = self.0.wrapping_add(1);
         if self.0 == 0 {
             self.warn("Log index overflowed; log index may be inaccurate.");
@@ -209,7 +209,7 @@ impl Logger {
     pub fn error(&mut self, s: &str) -> &mut Self {
         let header = self.fmt_header(LogLevel::Error);
         let string = self.fmt_string(LogLevel::Error, s);
-        println!("{}{}", header, string);
+        eprintln!("{}{}", header, string);
         self.0 = self.0.wrapping_add(1);
         if self.0 == 0 {
             self.warn("Log index overflowed; log index may be inaccurate.");
@@ -235,7 +235,7 @@ impl Logger {
     pub fn success(&mut self, s: &str) -> &mut Self {
         let header = self.fmt_header(LogLevel::Success);
         let string = self.fmt_string(LogLevel::Success, s);
-        println!("{}{}", header, string);
+        eprintln!("{}{}", header, string);
         self.0 = self.0.wrapping_add(1);
         if self.0 == 0 {
             self.warn("Log index overflowed; log index may be inaccurate.");
@@ -261,7 +261,7 @@ impl Logger {
     pub fn critical(&mut self, s: &str) -> &mut Self {
         let header = self.fmt_header(LogLevel::Critical);
         let string = self.fmt_string(LogLevel::Critical, s);
-        println!("{}{}", header, string);
+        eprintln!("{}{}", header, string);
         self.0 = self.0.wrapping_add(1);
         if self.0 == 0 {
             self.warn("Log index overflowed; log index may be inaccurate.");
@@ -278,7 +278,7 @@ impl Logger {
     - `NoColor`: Removes all colour sequences.
     - `NoBold`: Removes all bold sequences.
     - `Plain`: Removes all formatting escape characters.
-    - `Basic`: Turns this into a bare `println!()` call.
+    - `Basic`: Turns this into a bare `eprintln!()` call.
     - `Reset`: Resets the logger's formatter to default settings.
  */
 #[derive(Copy, Clone)]
@@ -293,7 +293,7 @@ pub enum FormatOptions {
     NoBold,
     /// Removes all formatting escape characters.
     Plain,
-    /// Removes all extras; this is now just `println!()`.
+    /// Removes all extras; this is now just `eprintln!()`.
     Basic,
     /// Reset the logger's formatter to its default state.
     Reset,
