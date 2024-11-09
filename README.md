@@ -51,13 +51,15 @@ l.i("This is an info message.")
 This will output the following to the console:
 
 ```
-[*] This is an info message.
-[~] This is a warning message.
-[!] This is an error message.
-[+] This is a success message.
+[0000:*] This is an info message.
+[0001:~] This is a warning message.
+[0002:!] This is an error message.
+[0003:+] This is a success message.
 ```
 
 It will also be coloured in most terminals.
+
+All formatting is optional; please see the documentation at [Docs.rs](https://docs.rs/forestry/latest/forestry/index.html), specifically for `crate::logs::FormatOptions`
 
 ## Contributing
 

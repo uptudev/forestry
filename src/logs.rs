@@ -1,32 +1,32 @@
 use colored::*;
 
 /**
- * A simple logger for an application.
- * 
- * The logger is used to log messages to the console.
- * The messages are coloured based on their severity level.
- * Logs are output with a unique 16-bit log index.
- * Logger also contains an 8-bit options value set by `cfg()`.
+    A simple logger for an application.
+    
+    The logger is used to log messages to the console.
+    The messages are coloured based on their severity level.
+    Logs are output with a unique 16-bit log index.
+    Logger also contains an 8-bit options value set by `cfg()`.
  */
 pub struct Logger(u16, u8);
 
 impl Logger {
     /**
-     * Create a new logger.
-     * 
-     * The logger is initialised with a log index of 0.
+        Create a new logger.
+      
+        The logger is initialised with a log index of 0.
      */
     pub fn new() -> Self {
         Logger(0, 0)
     }
 
     /**
-     * Configure the logger with options.
-     *
-     * See `crate::logs::FormatOptions` for more details.
-     *
-     * # Arguments
-     * - `opts`: an array of FormatOptions
+        Configure the logger with options.
+        
+        See `crate::logs::FormatOptions` for more details.
+        
+        # Arguments
+        - `opts`: an array of FormatOptions
      */
     pub fn cfg(&mut self, opts: &[FormatOptions]) -> &mut Self {
         for &e in opts {
@@ -129,19 +129,19 @@ impl Logger {
     }
 
     /**
-     * Log a message.
-     *
-     * The message is logged as an INFO message.
-     *
-     * # Arguments
-     * - `s`: The message to log.
-     *
-     * # Example
-     * ```rust
-        use forestry::prelude::*;
-        let mut l = Logger::new();
-        l.i("info");            // Output: [0000:*] info
-     * ```
+        Log a message.
+        
+        The message is logged as an INFO message.
+        
+        # Arguments
+        - `s`: The message to log.
+        
+        # Example
+        ```rust
+         use forestry::prelude::*;
+         let mut l = Logger::new();
+         l.i("info");            // Output: [0000:*] info
+        ```
      */
     pub fn i(&mut self, s: &str) -> &mut Self {
         let header = self.fmt_header(LogLevel::Info);
@@ -155,19 +155,19 @@ impl Logger {
     }
 
     /**
-     * Log a message.
-     * 
-     * The message is logged as a WARN message.
-     *
-     * # Arguments
-     * - `s`: The message to log.
-     *
-     * # Example
-     * ```rust
-        use forestry::prelude::*;
-        let mut l = Logger::new();
-        l.w("warn");            // Output: [0000:!] warn
-     * ```
+        Log a message.
+        
+        The message is logged as a WARN message.
+        
+        # Arguments
+        - `s`: The message to log.
+        
+        # Example
+        ```rust
+         use forestry::prelude::*;
+         let mut l = Logger::new();
+         l.w("warn");            // Output: [0000:!] warn
+        ```
      */
     pub fn w(&mut self, s: &str) -> &mut Self {
         let header = self.fmt_header(LogLevel::Warn);
@@ -181,19 +181,19 @@ impl Logger {
     }
 
     /**
-     * Log a message.
-     * 
-     * The message is logged as an ERROR message.
-     *
-     * # Arguments
-     * - `s`: The message to log.
-     *
-     * # Example
-     * ```rust
-        use forestry::prelude::*;
-        let mut l = Logger::new();
-        l.e("error");           // Output: [0000:✘] error
-     * ```
+        Log a message.
+        
+        The message is logged as an ERROR message.
+        
+        # Arguments
+        - `s`: The message to log.
+        
+        # Example
+        ```rust
+         use forestry::prelude::*;
+         let mut l = Logger::new();
+         l.e("error");           // Output: [0000:✘] error
+        ```
      */
     pub fn e(&mut self, s: &str) -> &mut Self {
         let header = self.fmt_header(LogLevel::Error);
@@ -207,19 +207,19 @@ impl Logger {
     }
 
     /**
-     * Log a message.
-     * 
-     * The message is logged as a SUCCESS message.
-     *
-     * # Arguments
-     * - `s`: The message to log.
-     *
-     * # Example
-     * ```rust
-        use forestry::prelude::*;
-        let mut l = Logger::new();
-        l.s("success");         // Output: [0000:✔] success
-     * ```
+        Log a message.
+        
+        The message is logged as a SUCCESS message.
+        
+        # Arguments
+        - `s`: The message to log.
+        
+        # Example
+        ```rust
+         use forestry::prelude::*;
+         let mut l = Logger::new();
+         l.s("success");         // Output: [0000:✔] success
+        ```
      */
     pub fn s(&mut self, s: &str) -> &mut Self {
         let header = self.fmt_header(LogLevel::Success);
@@ -234,15 +234,15 @@ impl Logger {
 }
 
 /**
- * Formatting options for the `Logger`.
- *
- * - `NoIndex`: Removes the incrementing log index.
- * - `NoSymbol`: Removes the log type symbol.
- * - `NoColor`: Removes all colour sequences.
- * - `NoBold`: Removes all bold sequences.
- * - `Plain`: Removes all formatting escape characters.
- * - `Basic`: Turns this into a bare `println!()` call.
- * - `Reset`: Resets the logger's formatter to default settings.
+    Formatting options for the `Logger`.
+    
+    * `NoIndex`: Removes the incrementing log index.
+    * `NoSymbol`: Removes the log type symbol.
+    * `NoColor`: Removes all colour sequences.
+    * `NoBold`: Removes all bold sequences.
+    * `Plain`: Removes all formatting escape characters.
+    * `Basic`: Turns this into a bare `println!()` call.
+    * `Reset`: Resets the logger's formatter to default settings.
  */
 #[derive(Copy, Clone)]
 pub enum FormatOptions {
