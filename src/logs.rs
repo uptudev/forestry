@@ -111,6 +111,9 @@ impl Logger {
                 LogLevel::Success => {
                     fmt = fmt.green()
                 },
+                LogLevel::Critical => {
+                    fmt = fmt.on_red().white()
+                },
             }
         }
         if self.1 & 0b1000 == 0 {
@@ -121,6 +124,9 @@ impl Logger {
                     fmt = fmt.bold()
                 },
                 LogLevel::Success => {
+                    fmt = fmt.bold()
+                },
+                LogLevel::Critical => {
                     fmt = fmt.bold()
                 },
             }
@@ -231,6 +237,32 @@ impl Logger {
         }
         self
     }
+
+    /**
+        Log a message,
+
+        The message is logged as a CRITICAL message.
+
+        # Arguments
+        - `s`: The message to log.
+
+        # Example
+        ```rust
+         use forestry::prelude::*;
+         let mut l = Logger::new();
+         l.c("critical");        // Output: [0000:%] critical
+        ```
+    */
+    pub fn c(&mut self, s: &str) -> &mut Self {
+        let header = self.fmt_header(LogLevel::Critical);
+        let string = self.fmt_string(LogLevel::Critical, s);
+        println!("{}{}", header, string);
+        self.0 = self.0.wrapping_add(1);
+        if self.0 == 0 {
+            self.w("Log index overflowed; log index may be inaccurate.");
+        }
+        self
+    }
 }
 
 /**
@@ -267,4 +299,5 @@ enum LogLevel {
     Warn,
     Error,
     Success,
+    Critical,
 }
