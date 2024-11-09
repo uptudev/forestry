@@ -1,6 +1,6 @@
 # Forestry
 
-A CLI logging library.
+A simple, efficient, concise, and elegant logging library for Rust.
 
 ## Table of Contents
 
@@ -30,11 +30,11 @@ Forestry is a simple logging library that allows you to log messages to the cons
 use forestry::prelude::*;
 
 let l = Logger::new();
-l.i("This is an info message.");
-l.w("This is a warning message.");
-l.e("This is an error message.");
-l.s("This is a success message.");
-l.c("This is a critical message.");
+l.info("This is an info message.");
+l.warn("This is a warning message.");
+l.error("This is an error message.");
+l.success("This is a success message.");
+l.critical("This is a critical message.");
 ```
 
 These calls can also be inlined as follows
@@ -43,11 +43,11 @@ These calls can also be inlined as follows
 use forestry::prelude::*
 
 let l = Logger::new();
-l.i("This is an info message.")
-    .w("This is a warning message.")
-    .e("This is an error message.")
-    .s("This is a success message.")
-    .c("This is a critical message.");
+l.info("This is an info message.")
+    .warn("This is a warning message.")
+    .error("This is an error message.")
+    .success("This is a success message.")
+    .critical("This is a critical message.");
 ```
 
 This will output the following to the console:

@@ -151,16 +151,16 @@ impl Logger {
         ```rust
          use forestry::prelude::*;
          let mut l = Logger::new();
-         l.i("info");            // Output: [0000:*] info
+         l.info("info");            // Output: [0000:*] info
         ```
      */
-    pub fn i(&mut self, s: &str) -> &mut Self {
+    pub fn info(&mut self, s: &str) -> &mut Self {
         let header = self.fmt_header(LogLevel::Info);
         let string = self.fmt_string(LogLevel::Info, s);
         println!("{}{}", header, string);
         self.0 = self.0.wrapping_add(1);
         if self.0 == 0 {
-            self.w("Log index overflowed; log index may be inaccurate.");
+            self.warn("Log index overflowed; log index may be inaccurate.");
         }
         self
     }
@@ -177,16 +177,16 @@ impl Logger {
         ```rust
          use forestry::prelude::*;
          let mut l = Logger::new();
-         l.w("warn");            // Output: [0000:~] warn
+         l.warn("warn");            // Output: [0000:~] warn
         ```
      */
-    pub fn w(&mut self, s: &str) -> &mut Self {
+    pub fn warn(&mut self, s: &str) -> &mut Self {
         let header = self.fmt_header(LogLevel::Warn);
         let string = self.fmt_string(LogLevel::Warn, s);
         println!("{}{}", header, string);
         self.0 = self.0.wrapping_add(1);
         if self.0 == 0 {
-            self.w("Log index overflowed; log index may be inaccurate.");
+            self.warn("Log index overflowed; log index may be inaccurate.");
         }
         self
     }
@@ -203,16 +203,16 @@ impl Logger {
         ```rust
          use forestry::prelude::*;
          let mut l = Logger::new();
-         l.e("error");           // Output: [0000:!] error
+         l.error("error");           // Output: [0000:!] error
         ```
      */
-    pub fn e(&mut self, s: &str) -> &mut Self {
+    pub fn error(&mut self, s: &str) -> &mut Self {
         let header = self.fmt_header(LogLevel::Error);
         let string = self.fmt_string(LogLevel::Error, s);
         println!("{}{}", header, string);
         self.0 = self.0.wrapping_add(1);
         if self.0 == 0 {
-            self.w("Log index overflowed; log index may be inaccurate.");
+            self.warn("Log index overflowed; log index may be inaccurate.");
         }
         self
     }
@@ -229,16 +229,16 @@ impl Logger {
         ```rust
          use forestry::prelude::*;
          let mut l = Logger::new();
-         l.s("success");         // Output: [0000:+] success
+         l.success("success");         // Output: [0000:+] success
         ```
      */
-    pub fn s(&mut self, s: &str) -> &mut Self {
+    pub fn success(&mut self, s: &str) -> &mut Self {
         let header = self.fmt_header(LogLevel::Success);
         let string = self.fmt_string(LogLevel::Success, s);
         println!("{}{}", header, string);
         self.0 = self.0.wrapping_add(1);
         if self.0 == 0 {
-            self.w("Log index overflowed; log index may be inaccurate.");
+            self.warn("Log index overflowed; log index may be inaccurate.");
         }
         self
     }
@@ -255,16 +255,16 @@ impl Logger {
         ```rust
          use forestry::prelude::*;
          let mut l = Logger::new();
-         l.c("critical");        // Output: [0000:%] critical
+         l.critical("critical");        // Output: [0000:%] critical
         ```
     */
-    pub fn c(&mut self, s: &str) -> &mut Self {
+    pub fn critical(&mut self, s: &str) -> &mut Self {
         let header = self.fmt_header(LogLevel::Critical);
         let string = self.fmt_string(LogLevel::Critical, s);
         println!("{}{}", header, string);
         self.0 = self.0.wrapping_add(1);
         if self.0 == 0 {
-            self.w("Log index overflowed; log index may be inaccurate.");
+            self.warn("Log index overflowed; log index may be inaccurate.");
         }
         self
     }
