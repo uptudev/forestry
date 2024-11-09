@@ -1,4 +1,4 @@
-name: Rust
+name: Cargo Test (macOS)
 
 on:
   push:
@@ -10,7 +10,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  Rust_Test:
+  cargo_test:
 
     runs-on: macos-latest
 
