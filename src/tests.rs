@@ -84,3 +84,15 @@ fn logger_ns_nc_nb() {
         .s("success")
         .c("critical");
 }
+
+#[test]
+fn logger_no_bold() {
+    println!();
+    let mut l = Logger::new();
+    l.cfg(&[NoBold])
+        .i("info")
+        .w("warning")
+        .e("error")
+        .s("success")
+        .c("critical");
+}
