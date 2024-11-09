@@ -1,6 +1,6 @@
 # Forestry
 
-A CLI logging library written in Rust.
+A CLI logging library.
 
 ## Table of Contents
 
