@@ -1,4 +1,4 @@
-# Forestry
+# forestry
 
 A simple, efficient, concise, and elegant logging library for Rust.
 
