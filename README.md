@@ -42,7 +42,7 @@ This will output the following to the console:
 [*] This is an info message.
 [~] This is a warning message.
 [!] This is an error message.
-[✔] This is a success message.
+[+] This is a success message.
 ```
 
 It will also be coloured in most terminals.
