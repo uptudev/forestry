@@ -36,6 +36,17 @@ l.e("This is an error message.");
 l.s("This is a success message.");
 ```
 
+This will output the following to the console:
+
+```
+[*] This is an info message.
+[~] This is a warning message.
+[!] This is an error message.
+[✔] This is a success message.
+```
+
+It will also be coloured in most terminals.
+
 ## Contributing
 
 If you would like to contribute to forestry, please open an issue or submit a pull request.

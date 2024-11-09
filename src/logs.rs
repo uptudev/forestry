@@ -67,7 +67,7 @@ impl Logger {
         println!(
             "[{}:{}] {}",
             count.yellow().bold(),
-            "!".yellow().bold(),
+            "~".yellow().bold(),
             s.yellow().bold());
         self.0 = self.0.wrapping_add(1);
         if self.0 == 0 {
@@ -95,7 +95,7 @@ impl Logger {
         println!(
             "[{}:{}] {}",
             count.red().bold(),
-            "✘".red().bold(),
+            "!".red().bold(),
             s.red().bold());
         self.0 = self.0.wrapping_add(1);
         if self.0 == 0 {
@@ -123,7 +123,7 @@ impl Logger {
         println!(
             "[{}:{}] {}",
             count.green().bold(),
-            "✔".green().bold(),
+            "+".green().bold(),
             s.green());
         self.0 = self.0.wrapping_add(1);
         if self.0 == 0 {
