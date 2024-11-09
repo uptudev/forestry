@@ -36,6 +36,18 @@ l.e("This is an error message.");
 l.s("This is a success message.");
 ```
 
+These calls can also be inlined as follows
+
+```rust
+use forestry::prelude::*
+
+let l = Logger::new();
+l.i("This is an info message.")
+.w("This is a warning message.")
+.e("This is an error message.")
+.s("This is a success message.");
+```
+
 This will output the following to the console:
 
 ```

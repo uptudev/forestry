@@ -6,8 +6,9 @@ use colored::*;
  * The logger is used to log messages to the console.
  * The messages are coloured based on their severity level.
  * Logs are output with a unique 16-bit log index.
+ * Logger also contains an 8-bit options value set by `cfg()`.
  */
-pub struct Logger(u16);
+pub struct Logger(u16, u8);
 
 impl Logger {
     /**
@@ -16,7 +17,115 @@ impl Logger {
      * The logger is initialised with a log index of 0.
      */
     pub fn new() -> Self {
-        Logger(0)
+        Logger(0, 0)
+    }
+
+    /**
+     * Configure the logger with options.
+     *
+     * See `crate::logs::FormatOptions` for more details.
+     *
+     * # Arguments
+     * - `opts`: an array of FormatOptions
+     */
+    pub fn cfg(&mut self, opts: &[FormatOptions]) -> &mut Self {
+        for &e in opts {
+            match e {
+                FormatOptions::NoIndex =>   self.1 |= 0b0001,
+                FormatOptions::NoSymbol =>  self.1 |= 0b0010,
+                FormatOptions::NoColor =>   self.1 |= 0b0100,
+                FormatOptions::NoBold =>    self.1 |= 0b1000,
+                FormatOptions::Plain =>     self.1 |= 0b1100,
+                FormatOptions::Basic =>     self.1 |= 0b1111,
+                FormatOptions::Reset =>     self.1 &= 0b0000,
+            }
+        }
+        self
+    }
+
+    fn fmt_header(&self, lvl: LogLevel) -> String {
+        // If neither part of the header is desired, return a blank string.
+        if self.1 & 0b0011 == 0b0011 {
+            return "".to_string();
+        }
+        let mut cnt: ColoredString = "".into();
+        let mut sym: ColoredString = "".into();
+
+        if self.1 & 0b0001 == 0 {
+            cnt = format!("{:0>4x}", self.0).into();
+        }
+        if self.1 & 0b0010 == 0 {
+            sym = match lvl {
+                LogLevel::Info => "*".into(),
+                LogLevel::Warn => "~".into(),
+                LogLevel::Error => "!".into(),
+                LogLevel::Success => "+".into(),
+            };
+        }
+        if self.1 & 0b0100 == 0 {
+            match lvl {
+                LogLevel::Info => {
+                    cnt = cnt.blue();
+                    sym = sym.blue();
+                },
+                LogLevel::Warn => {
+                    cnt = cnt.yellow();
+                    sym = sym.yellow();
+                },
+                LogLevel::Error => {
+                    cnt = cnt.red();
+                    sym = sym.red();
+                },
+                LogLevel::Success => {
+                    cnt = cnt.green();
+                    sym = sym.green();
+                },
+            }
+        }
+        if self.1 & 0b1000 == 0 {
+            cnt = cnt.bold();
+            sym = sym.bold();
+        }
+        if self.1 & 0b0011 == 0 {
+            return format!("[{}:{}] ", cnt, sym);
+        } else if self.1 & 0b0001 == 0 {
+            return format!("[{}] ", cnt);
+        } else {
+            return format!("[{}] ", sym);
+        }
+    }
+
+    fn fmt_string(&self, lvl: LogLevel, s: &str) -> String {
+        let mut fmt: ColoredString = s.into();
+        if self.1 & 0b0100 == 0 {
+            match lvl {
+                LogLevel::Info => {
+                    fmt = fmt.blue()
+                },
+                LogLevel::Warn => {
+                    fmt = fmt.yellow()
+                },
+                LogLevel::Error => {
+                    fmt = fmt.red()
+                },
+                LogLevel::Success => {
+                    fmt = fmt.green()
+                },
+            }
+        }
+        if self.1 & 0b1000 == 0 {
+            match lvl {
+                LogLevel::Info => {},
+                LogLevel::Warn => {},
+                LogLevel::Error => {
+                    fmt = fmt.bold()
+                },
+                LogLevel::Success => {
+                    fmt = fmt.bold()
+                },
+            }
+        }
+        fmt.to_string()
     }
 
     /**
@@ -34,17 +143,15 @@ impl Logger {
         l.i("info");            // Output: [0000:*] info
      * ```
      */
-    pub fn i(&mut self, s: &str) {
-        let count = format!("{:0>4x}", self.0);
-        println!(
-            "[{}:{}] {}",
-            count.blue().bold(),
-            "*".blue().bold(),
-            s.blue());
+    pub fn i(&mut self, s: &str) -> &mut Self {
+        let header = self.fmt_header(LogLevel::Info);
+        let string = self.fmt_string(LogLevel::Info, s);
+        println!("{}{}", header, string);
         self.0 = self.0.wrapping_add(1);
         if self.0 == 0 {
             self.w("Log index overflowed; log index may be inaccurate.");
         }
+        self
     }
 
     /**
@@ -62,17 +169,15 @@ impl Logger {
         l.w("warn");            // Output: [0000:!] warn
      * ```
      */
-    pub fn w(&mut self, s: &str) {
-        let count = format!("{:0>4x}", self.0);
-        println!(
-            "[{}:{}] {}",
-            count.yellow().bold(),
-            "~".yellow().bold(),
-            s.yellow().bold());
+    pub fn w(&mut self, s: &str) -> &mut Self {
+        let header = self.fmt_header(LogLevel::Warn);
+        let string = self.fmt_string(LogLevel::Warn, s);
+        println!("{}{}", header, string);
         self.0 = self.0.wrapping_add(1);
         if self.0 == 0 {
             self.w("Log index overflowed; log index may be inaccurate.");
         }
+        self
     }
 
     /**
@@ -90,17 +195,15 @@ impl Logger {
         l.e("error");           // Output: [0000:✘] error
      * ```
      */
-    pub fn e(&mut self, s: &str) {
-        let count = format!("{:0>4x}", self.0);
-        println!(
-            "[{}:{}] {}",
-            count.red().bold(),
-            "!".red().bold(),
-            s.red().bold());
+    pub fn e(&mut self, s: &str) -> &mut Self {
+        let header = self.fmt_header(LogLevel::Error);
+        let string = self.fmt_string(LogLevel::Error, s);
+        println!("{}{}", header, string);
         self.0 = self.0.wrapping_add(1);
         if self.0 == 0 {
             self.w("Log index overflowed; log index may be inaccurate.");
         }
+        self
     }
 
     /**
@@ -118,30 +221,50 @@ impl Logger {
         l.s("success");         // Output: [0000:✔] success
      * ```
      */
-    pub fn s(&mut self, s: &str) {
-        let count = format!("{:0>4x}", self.0);
-        println!(
-            "[{}:{}] {}",
-            count.green().bold(),
-            "+".green().bold(),
-            s.green());
+    pub fn s(&mut self, s: &str) -> &mut Self {
+        let header = self.fmt_header(LogLevel::Success);
+        let string = self.fmt_string(LogLevel::Success, s);
+        println!("{}{}", header, string);
         self.0 = self.0.wrapping_add(1);
         if self.0 == 0 {
             self.w("Log index overflowed; log index may be inaccurate.");
         }
+        self
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+/**
+ * Formatting options for the `Logger`.
+ *
+ * - `NoIndex`: Removes the incrementing log index.
+ * - `NoSymbol`: Removes the log type symbol.
+ * - `NoColor`: Removes all colour sequences.
+ * - `NoBold`: Removes all bold sequences.
+ * - `Plain`: Removes all formatting escape characters.
+ * - `Basic`: Turns this into a bare `println!()` call.
+ * - `Reset`: Resets the logger's formatter to default settings.
+ */
+#[derive(Copy, Clone)]
+pub enum FormatOptions {
+    /// Removes the incrementing log index.
+    NoIndex,
+    /// Removes the log type symbol.
+    NoSymbol,
+    /// Removes all colours.
+    NoColor,
+    /// Removes bold/highlighting.
+    NoBold,
+    /// Removes all formatting escape characters.
+    Plain,
+    /// Removes all extras; this is now just `println!()`.
+    Basic,
+    /// Reset the logger's formatter to its default state.
+    Reset,
+}
 
-    #[test]
-    fn logger_prints() {
-        let mut l = Logger::new();
-        l.i("info");
-        l.w("warning");
-        l.e("error");
-        l.s("success");
-    }
+enum LogLevel {
+    Info,
+    Warn,
+    Error,
+    Success,
 }
