@@ -9,7 +9,8 @@ fn logger_prints() {
         .i("info")
         .w("warning")
         .e("error")
-        .s("success");
+        .s("success")
+        .c("critical");
     }
 
 #[test]
@@ -20,7 +21,8 @@ fn logger_no_header() {
         .i("info")
         .w("warning")
         .e("error")
-        .s("success");
+        .s("success")
+        .c("critical");
 }
 
 #[test]
@@ -31,7 +33,8 @@ fn logger_plain() {
         .i("info")
         .w("warning")
         .e("error")
-        .s("success");
+        .s("success")
+        .c("critical");
 }
 
 #[test]
@@ -42,7 +45,8 @@ fn logger_basic() {
         .i("info")
         .w("warning")
         .e("error")
-        .s("success");
+        .s("success")
+        .c("critical");
 }
 
 #[test]
@@ -53,7 +57,8 @@ fn logger_no_index() {
         .i("info")
         .w("warning")
         .e("error")
-        .s("success");
+        .s("success")
+        .c("critical");
 }
 
 #[test]
@@ -64,7 +69,8 @@ fn logger_no_symbol() {
         .i("info")
         .w("warning")
         .e("error")
-        .s("success");
+        .s("success")
+        .c("critical");
 }
 
 #[test]
@@ -75,5 +81,6 @@ fn logger_ns_nc_nb() {
         .i("info")
         .w("warning")
         .e("error")
-        .s("success");
+        .s("success")
+        .c("critical");
 }
