@@ -285,6 +285,9 @@ impl Logger {
 /**
     Formatting options for the `Logger`.
     
+    - `File`: Logs to the default file (`forestry.log`).
+    - `FileAt(&'a std::fs::File)`: Logs to a specified file.
+    - `FileOnly`: Only logs to the file; requires `File` or `FileAt`.
     - `NoIndex`: Removes the incrementing log index.
     - `NoSymbol`: Removes the log type symbol.
     - `NoColor`: Removes all colour sequences.
