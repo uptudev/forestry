@@ -1,3 +1,5 @@
+use std::io::Write;
+
 use colored::*;
 
 /**
@@ -8,7 +10,7 @@ use colored::*;
     Logs are output with a unique 16-bit log index.
     Logger also contains an 8-bit options value set by `cfg()`.
  */
-pub struct Logger(u16, u8);
+pub struct Logger(u16, u8, Option<std::io::BufWriter<std::fs::File>>);
 
 impl Logger {
     /**
@@ -17,7 +19,7 @@ impl Logger {
         The logger is initialised with a log index of 0.
      */
     pub fn new() -> Self {
-        Logger(0, 0)
+        Logger(0, 0, None)
     }
 
     /**
@@ -28,16 +30,31 @@ impl Logger {
         # Arguments
         - `opts`: an array of FormatOptions
      */
-    pub fn cfg(&mut self, opts: &[FormatOptions]) -> &mut Self {
+    pub fn cfg(&mut self, opts: &[Options]) -> &mut Self {
         for &e in opts {
             match e {
-                FormatOptions::NoIndex =>   self.1 |= 0b0001,
-                FormatOptions::NoSymbol =>  self.1 |= 0b0010,
-                FormatOptions::NoColor =>   self.1 |= 0b0100,
-                FormatOptions::NoBold =>    self.1 |= 0b1000,
-                FormatOptions::Plain =>     self.1 |= 0b1100,
-                FormatOptions::Basic =>     self.1 |= 0b1111,
-                FormatOptions::Reset =>     self.1 &= 0b0000,
+                Options::NoIndex =>   self.1 |= 0b00000001,
+                Options::NoSymbol =>  self.1 |= 0b00000010,
+                Options::NoColor =>   self.1 |= 0b00000100,
+                Options::NoBold =>    self.1 |= 0b00001000,
+                Options::Plain =>     self.1 |= 0b00001100,
+                Options::Basic =>     self.1 |= 0b00001111,
+                Options::File => {
+                    self.1 |= 0b00010000;
+                    self.2 = Some(
+                        std::io::BufWriter::new(
+                        std::fs::File::create("forestry.log").unwrap())
+                    );
+                },
+                Options::FileAt(f) => {
+                    self.1 |= 0b00010000;
+                    self.2 = Some(
+                        std::io::BufWriter::new(
+                        f.try_clone().unwrap())
+                    );
+                },
+                Options::FileOnly =>  self.1 |= 0b00100000,
+                Options::Reset =>     self.1 &= 0b00000000,
             }
         }
         self
@@ -155,14 +172,7 @@ impl Logger {
         ```
      */
     pub fn info(&mut self, s: &str) -> &mut Self {
-        let header = self.fmt_header(LogLevel::Info);
-        let string = self.fmt_string(LogLevel::Info, s);
-        println!("{}{}", header, string);
-        self.0 = self.0.wrapping_add(1);
-        if self.0 == 0 {
-            self.warn("Log index overflowed; log index may be inaccurate.");
-        }
-        self
+        self.print(LogLevel::Info, s)
     }
 
     /**
@@ -181,14 +191,7 @@ impl Logger {
         ```
      */
     pub fn warn(&mut self, s: &str) -> &mut Self {
-        let header = self.fmt_header(LogLevel::Warn);
-        let string = self.fmt_string(LogLevel::Warn, s);
-        println!("{}{}", header, string);
-        self.0 = self.0.wrapping_add(1);
-        if self.0 == 0 {
-            self.warn("Log index overflowed; log index may be inaccurate.");
-        }
-        self
+        self.print(LogLevel::Warn, s)
     }
 
     /**
@@ -207,14 +210,7 @@ impl Logger {
         ```
      */
     pub fn error(&mut self, s: &str) -> &mut Self {
-        let header = self.fmt_header(LogLevel::Error);
-        let string = self.fmt_string(LogLevel::Error, s);
-        println!("{}{}", header, string);
-        self.0 = self.0.wrapping_add(1);
-        if self.0 == 0 {
-            self.warn("Log index overflowed; log index may be inaccurate.");
-        }
-        self
+        self.print(LogLevel::Error, s)
     }
 
     /**
@@ -233,14 +229,7 @@ impl Logger {
         ```
      */
     pub fn success(&mut self, s: &str) -> &mut Self {
-        let header = self.fmt_header(LogLevel::Success);
-        let string = self.fmt_string(LogLevel::Success, s);
-        println!("{}{}", header, string);
-        self.0 = self.0.wrapping_add(1);
-        if self.0 == 0 {
-            self.warn("Log index overflowed; log index may be inaccurate.");
-        }
-        self
+        self.print(LogLevel::Success, s)
     }
 
     /**
@@ -259,9 +248,32 @@ impl Logger {
         ```
     */
     pub fn critical(&mut self, s: &str) -> &mut Self {
-        let header = self.fmt_header(LogLevel::Critical);
-        let string = self.fmt_string(LogLevel::Critical, s);
-        println!("{}{}", header, string);
+        self.print(LogLevel::Critical, s)
+    }
+
+    fn print(&mut self, lvl: LogLevel, string: &str) -> &mut Self {
+        if self.1 & 0b00100000 == 0 {
+            eprintln!("{}{}", self.fmt_header(lvl), self.fmt_string(lvl, string));
+        }
+
+        if self.1 & 0b00010000 != 0 {
+            let temp = self.1 & 0b00001100;
+            self.1 |= 0b00001100;
+            // invoke buffered print here while formatting is temporarily plain
+            let plain = format!("{}{}\n", self.fmt_header(lvl), self.fmt_string(lvl, string));
+            if self.2.is_none() {
+                self.warn("File output enabled without file specified.");
+            } else {
+                self.2
+                    .as_mut()
+                    .unwrap()
+                    .write(plain.as_bytes())
+                    .unwrap();
+            }
+            self.1 &= 0b11110011;
+            self.1 |= temp;
+        }
+
         self.0 = self.0.wrapping_add(1);
         if self.0 == 0 {
             self.warn("Log index overflowed; log index may be inaccurate.");
@@ -282,7 +294,13 @@ impl Logger {
     - `Reset`: Resets the logger's formatter to default settings.
  */
 #[derive(Copy, Clone)]
-pub enum FormatOptions {
+pub enum Options <'a> {
+    /// Logs to the default file
+    File,
+    /// Logs to a specified file
+    FileAt(&'a std::fs::File),
+    /// Only logs to the file; requires `File` or `FileAt`.
+    FileOnly,
     /// Removes the incrementing log index.
     NoIndex,
     /// Removes the log type symbol.
@@ -299,6 +317,7 @@ pub enum FormatOptions {
     Reset,
 }
 
+#[derive(Clone, Copy)]
 enum LogLevel {
     Info,
     Warn,

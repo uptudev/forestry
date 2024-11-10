@@ -1,5 +1,5 @@
 use super::prelude::*;
-use FormatOptions::*;
+use Options::*;
 
 #[test]
 fn logger_prints() {
@@ -90,6 +90,30 @@ fn logger_no_bold() {
     println!();
     let mut l = Logger::new();
     l.cfg(&[NoBold])
+        .info("info")
+        .warn("warning")
+        .error("error")
+        .success("success")
+        .critical("critical");
+}
+
+#[test]
+fn logger_file_io() {
+    println!();
+    let mut l = Logger::new();
+    l.cfg(&[File, FileOnly])
+        .info("info")
+        .warn("warning")
+        .error("error")
+        .success("success")
+        .critical("critical");
+}
+
+#[test]
+fn logger_file_at() {
+    println!();
+    let mut l = Logger::new();
+    l.cfg(&[FileAt(&std::fs::File::create("fileat.log").unwrap()), FileOnly])
         .info("info")
         .warn("warning")
         .error("error")
