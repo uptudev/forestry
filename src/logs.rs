@@ -25,10 +25,10 @@ impl Logger {
     /**
         Configure the logger with options.
         
-        See `crate::logs::FormatOptions` for more details.
+        See [Options] for more details.
         
         # Arguments
-        - `opts`: an array of FormatOptions
+        - `opts`: an array of [Options]
      */
     pub fn cfg(&mut self, opts: &[Options]) -> &mut Self {
         for &e in opts {

@@ -13,8 +13,8 @@
 //! - [success](logs::Logger::success), and
 //! - [critical](logs::Logger::critical) methods to log messages.
 //!
-//! All formatting can be configured using the [cfg()](logs::Logger::cfg) method in conjunction
-//! with the [FormatOptions](logs::FormatOptions) enumerator.
+//! All configuration can be done using the [cfg()](logs::Logger::cfg) method in conjunction
+//! with the [Options](logs::Options) enumerator.
 //! See the [logs] module for more details.
 
 pub mod logs;
