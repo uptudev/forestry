@@ -290,7 +290,7 @@ impl Logger {
     - `NoColor`: Removes all colour sequences.
     - `NoBold`: Removes all bold sequences.
     - `Plain`: Removes all formatting escape characters.
-    - `Basic`: Turns this into a bare `println!()` call.
+    - `Basic`: Turns this into a bare `eprintln!()` call.
     - `Reset`: Resets the logger's formatter to default settings.
  */
 #[derive(Copy, Clone)]
@@ -311,7 +311,7 @@ pub enum Options <'a> {
     NoBold,
     /// Removes all formatting escape characters.
     Plain,
-    /// Removes all extras; this is now just `println!()`.
+    /// Removes all extras; this is now just `eprintln!()`.
     Basic,
     /// Reset the logger's formatter to its default state.
     Reset,
