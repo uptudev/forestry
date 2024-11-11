@@ -120,3 +120,27 @@ fn logger_file_at() {
         .success("success")
         .critical("critical");
 }
+
+#[test]
+fn logger_timer() {
+    println!();
+    let mut l = Logger::new();
+    l.cfg(&[Timer])
+        .info("info")
+        .warn("warning")
+        .error("error")
+        .success("success")
+        .critical("critical");
+}
+
+#[test]
+fn logger_timer_at() {
+    println!();
+    let mut l = Logger::new();
+    l.cfg(&[TimerAt(&std::time::Instant::now())])
+        .info("info")
+        .warn("warning")
+        .error("error")
+        .success("success")
+        .critical("critical");
+}
