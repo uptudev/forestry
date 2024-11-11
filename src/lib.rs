@@ -14,7 +14,8 @@
 //! - [critical](logs::Logger::critical) methods to log messages.
 //!
 //! All configuration can be done using the [cfg()](logs::Logger::cfg) method in conjunction
-//! with the [Options](logs::Options) enumerator.
+//! with the [Options](logs::Options) enumerator. Valid options include adding a timer, logging to
+//! a file, and more.
 //! See the [logs] module for more details.
 
 pub mod logs;
