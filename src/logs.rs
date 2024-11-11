@@ -138,6 +138,7 @@ impl Logger {
             sym = sym.bold();
             tim = tim.bold();
         }
+        #[allow(unused_assignments)]
         let mut res = "".to_string();
         if self.flags & 0b0011 == 0 {
             res = format!("[{}:{}]", cnt, sym);
