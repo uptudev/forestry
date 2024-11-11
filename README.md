@@ -62,7 +62,7 @@ This will output the following to the console:
 
 It will also be coloured in most terminals.
 
-All formatting is optional; please see the documentation at [Docs.rs](https://docs.rs/forestry/latest/forestry/index.html), specifically for `crate::logs::Options`. File output is also supported via the same `crate::logs::Options` enum.
+All formatting is optional; please see the documentation at [Docs.rs](https://docs.rs/forestry/latest/forestry/index.html), specifically for `crate::logs::Options`. Optional file output and timer inclusion is also supported via the same `crate::logs::Options` enum.
 
 ## Contributing
 
