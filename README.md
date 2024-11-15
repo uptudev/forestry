@@ -1,6 +1,8 @@
 # forestry
 
-[![](https://img.shields.io/crates/v/forestry)](https://crates.io/crates/forestry/) [![](https://img.shields.io/github/actions/workflow/status/uptudev/forestry/rust.yml)](https://github.com/uptudev/forestry/actions/workflows/rust.yml)
+[![crate version number](https://img.shields.io/crates/v/forestry)](https://crates.io/crates/forestry/)
+[![crate download count](https://img.shields.io/crates/d/forestry?label=downloads&color=blue)](https://crates.io/crates/forestry/)
+[![GitHub Actions status](https://img.shields.io/github/actions/workflow/status/uptudev/forestry/rust.yml)](https://github.com/uptudev/forestry/actions/workflows/rust.yml)
 
 A simple, efficient, concise, and elegant logging library for Rust.
 
