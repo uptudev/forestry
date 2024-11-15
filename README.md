@@ -1,5 +1,7 @@
 # forestry
 
+[![](https://img.shields.io/crates/v/forestry)](https://crates.io/crates/forestry/) [![](https://img.shields.io/github/actions/workflow/status/uptudev/forestry/rust.yml)](https://github.com/uptudev/forestry/actions/workflows/rust.yml)
+
 A simple, efficient, concise, and elegant logging library for Rust.
 
 ## Table of Contents
