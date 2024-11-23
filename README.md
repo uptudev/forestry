@@ -68,6 +68,19 @@ It will also be coloured in most terminals.
 
 All formatting is optional; please see the documentation at [Docs.rs](https://docs.rs/forestry/latest/forestry/index.html), specifically for `crate::logs::Options`. Optional file output and timer inclusion is also supported via the same `crate::logs::Options` enum.
 
+### Async
+
+Forestry also supports asynchronous logging. To enable this feature, simply add the `async` feature to `forestry`'s declaration in your `Cargo.toml` file.
+
+#### Example
+
+```toml
+[dependencies]
+forestry = { version = ">=1.5", features = ["async"] }
+```
+
+Then, the logger's internal print calls will be asynchronous futures. This is useful for logging in async functions or in async contexts. `await`ing the logger's methods will return the same `&mut Logger` as before, so chaining is still possible (although only by adding `await` to every call).
+
 ## Contributing
 
 If you would like to contribute to forestry, please open an issue or submit a pull request.
