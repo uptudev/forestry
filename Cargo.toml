@@ -12,6 +12,10 @@ keywords = ["logging", "cli", "console", "color", "string"]
 
 [features]
 plain = ["colored/no-color"]
+async = []
 
 [dependencies]
 colored = "2.1.0"
+
+[dev-dependencies]
+futures = { version = "0.3" }
