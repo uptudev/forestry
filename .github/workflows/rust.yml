@@ -22,6 +22,8 @@ jobs:
       run: cargo test --verbose -- --nocapture --test-threads=1
     - name: Run tests (plain)
       run: cargo test --verbose --features plain -- --nocapture --test-threads=1
+    - name: Run tests (async)
+      run: cargo test --verbose --features async -- --nocapture --test-threads=1
 
   cargo_test_macos:
 
@@ -35,6 +37,8 @@ jobs:
       run: cargo test --verbose -- --nocapture --test-threads=1
     - name: Run tests (plain)
       run: cargo test --verbose --features plain -- --nocapture --test-threads=1
+    - name: Run tests (async)
+      run: cargo test --verbose --features async -- --nocapture --test-threads=1
 
   cargo_test_windows:
 
@@ -48,3 +52,5 @@ jobs:
       run: cargo test --verbose -- --nocapture --test-threads=1
     - name: Run tests (plain)
       run: cargo test --verbose --features plain -- --nocapture --test-threads=1
+    - name: Run tests (async)
+      run: cargo test --verbose --features async -- --nocapture --test-threads=1
