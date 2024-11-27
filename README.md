@@ -30,6 +30,7 @@ Forestry depends on the `colored` crate for colorized output.
 
 Forestry is a simple logging library that allows you to log messages to the console with different levels of severity. Here's an example of how to use it:
 
+`src/main.rs`
 ```rust
 use forestry::prelude::*;
 
@@ -43,6 +44,7 @@ log.critical("This is a critical message.");
 
 These calls can also be inlined as follows
 
+`src/main.rs`
 ```rust
 use forestry::prelude::*
 
@@ -82,7 +84,7 @@ First, add the `async` feature to `forestry` in your `Cargo.toml` file by changi
 forestry = { version = ">=1.5", features = ["async"] }
 ```
 
-or
+or alternatively:
 
 `Cargo.toml`
 ```toml
