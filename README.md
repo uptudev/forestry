@@ -74,9 +74,21 @@ Forestry also supports asynchronous logging. To enable this feature, simply add 
 
 #### Example
 
+First, add the `async` feature to `forestry` in your `Cargo.toml` file by changing the default declaration to either of the following:
+
+`Cargo.toml`
 ```toml
 [dependencies]
 forestry = { version = ">=1.5", features = ["async"] }
+```
+
+or
+
+`Cargo.toml`
+```toml
+[dependencies.forestry]
+version = ">=1.5"
+features = ["async"]
 ```
 
 Then, the logger's internal print calls will be asynchronous futures. This is useful for logging in async functions or in async contexts. `await`ing the logger's methods will return the same `&mut Logger` as before, so chaining is still possible (although only by adding `await` to every call).
