@@ -1,12 +1,10 @@
 use super::prelude::*;
 
-#[cfg(feature = "async")]
-extern crate futures;
-
 #[allow(unused_imports)]
 use Options::*;
 
-#[test]#[cfg(not(feature = "async"))]
+#[test]
+#[cfg(not(feature = "async"))]
 fn logger_prints() {
     println!();
     let mut l = Logger::new();
@@ -18,11 +16,12 @@ fn logger_prints() {
         .critical("critical");
     }
 
-#[test]#[cfg(not(feature = "async"))]
+#[test]
+#[cfg(not(feature = "async"))]
 fn logger_no_header() {
     println!();
     let mut l = Logger::new();
-    l.cfg(&[NoIndex, NoSymbol])
+    l.cfg(&[NoIndex, NoSymbol]).unwrap()
         .info("info")
         .warn("warning")
         .error("error")
@@ -30,11 +29,12 @@ fn logger_no_header() {
         .critical("critical");
 }
 
-#[test]#[cfg(not(feature = "async"))]
+#[test]
+#[cfg(not(feature = "async"))]
 fn logger_plain() {
     println!();
     let mut l = Logger::new();
-    l.cfg(&[Plain])
+    l.cfg(&[Plain]).unwrap()
         .info("info")
         .warn("warning")
         .error("error")
@@ -42,11 +42,12 @@ fn logger_plain() {
         .critical("critical");
 }
 
-#[test]#[cfg(not(feature = "async"))]
+#[test]
+#[cfg(not(feature = "async"))]
 fn logger_basic() {
     println!();
     let mut l = Logger::new();
-    l.cfg(&[Basic])
+    l.cfg(&[Basic]).unwrap()
         .info("info")
         .warn("warning")
         .error("error")
@@ -54,11 +55,12 @@ fn logger_basic() {
         .critical("critical");
 }
 
-#[test]#[cfg(not(feature = "async"))]
+#[test]
+#[cfg(not(feature = "async"))]
 fn logger_no_index() {
     println!();
     let mut l = Logger::new();
-    l.cfg(&[NoIndex])
+    l.cfg(&[NoIndex]).unwrap()
         .info("info")
         .warn("warning")
         .error("error")
@@ -66,11 +68,12 @@ fn logger_no_index() {
         .critical("critical");
 }
 
-#[test]#[cfg(not(feature = "async"))]
+#[test]
+#[cfg(not(feature = "async"))]
 fn logger_no_symbol() {
     println!();
     let mut l = Logger::new();
-    l.cfg(&[NoSymbol])
+    l.cfg(&[NoSymbol]).unwrap()
         .info("info")
         .warn("warning")
         .error("error")
@@ -78,11 +81,12 @@ fn logger_no_symbol() {
         .critical("critical");
 }
 
-#[test]#[cfg(not(feature = "async"))]
+#[test]
+#[cfg(not(feature = "async"))]
 fn logger_ns_nc_nb() {
     println!();
     let mut l = Logger::new();
-    l.cfg(&[NoSymbol, NoColor, NoBold])
+    l.cfg(&[NoSymbol, NoColor, NoBold]).unwrap()
         .info("info")
         .warn("warning")
         .error("error")
@@ -90,11 +94,12 @@ fn logger_ns_nc_nb() {
         .critical("critical");
 }
 
-#[test]#[cfg(not(feature = "async"))]
+#[test]
+#[cfg(not(feature = "async"))]
 fn logger_no_bold() {
     println!();
     let mut l = Logger::new();
-    l.cfg(&[NoBold])
+    l.cfg(&[NoBold]).unwrap()
         .info("info")
         .warn("warning")
         .error("error")
@@ -102,11 +107,12 @@ fn logger_no_bold() {
         .critical("critical");
 }
 
-#[test]#[cfg(not(feature = "async"))]
+#[test]
+#[cfg(not(feature = "async"))]
 fn logger_file_io() {
     println!();
     let mut l = Logger::new();
-    l.cfg(&[File, FileOnly])
+    l.cfg(&[File, FileOnly]).unwrap()
         .info("info")
         .warn("warning")
         .error("error")
@@ -114,11 +120,12 @@ fn logger_file_io() {
         .critical("critical");
 }
 
-#[test]#[cfg(not(feature = "async"))]
+#[test]
+#[cfg(not(feature = "async"))]
 fn logger_file_at() {
     println!();
     let mut l = Logger::new();
-    l.cfg(&[FileAt(&std::fs::File::create("fileat.log").unwrap()), FileOnly])
+    l.cfg(&[FileAt(&std::fs::File::create("fileat.log").unwrap()), FileOnly]).unwrap()
         .info("info")
         .warn("warning")
         .error("error")
@@ -126,11 +133,12 @@ fn logger_file_at() {
         .critical("critical");
 }
 
-#[test]#[cfg(not(feature = "async"))]
+#[test]
+#[cfg(not(feature = "async"))]
 fn logger_timer() {
     println!();
     let mut l = Logger::new();
-    l.cfg(&[Timer])
+    l.cfg(&[Timer]).unwrap()
         .info("info")
         .warn("warning")
         .error("error")
@@ -138,11 +146,12 @@ fn logger_timer() {
         .critical("critical");
 }
 
-#[test]#[cfg(not(feature = "async"))]
+#[test]
+#[cfg(not(feature = "async"))]
 fn logger_timer_at() {
     println!();
     let mut l = Logger::new();
-    l.cfg(&[TimerAt(&std::time::Instant::now())])
+    l.cfg(&[TimerAt(&std::time::Instant::now())]).unwrap()
         .info("info")
         .warn("warning")
         .error("error")
@@ -150,16 +159,13 @@ fn logger_timer_at() {
         .critical("critical");
 }
 
-#[test]#[cfg(feature = "async")]
-fn logger_async() {
+#[tokio::test]
+#[cfg(feature = "async")]
+async fn logger_async() {
     println!();
     let mut l = Logger::new();
-    futures::executor::block_on(logger_async_inner(&mut l));
-}
-
-#[cfg(feature = "async")]
-async fn logger_async_inner(l: &mut Logger) {
-    l.info("info").await
+    l
+        .info("info").await
         .warn("warning").await
         .error("error").await
         .success("success").await

@@ -1,4 +1,8 @@
-use std::io::Write;
+#[cfg(not(feature = "async"))]
+use std::{fs::File, io::{self, Write}};
+
+#[cfg(feature = "async")]
+use tokio::{fs::File, io::{self, AsyncWriteExt}};
 
 use colored::*;
 
@@ -13,7 +17,7 @@ use colored::*;
 pub struct Logger {
     index: u16,
     flags: u8,
-    file: Option<std::io::BufWriter<std::fs::File>>,
+    file: Option<io::BufWriter<File>>,
     timer: Option<std::time::Instant>,
 }
 
@@ -32,56 +36,6 @@ impl Logger {
         }
     }
 
-    /**
-        Configure the logger with options.
-        
-        See [Options] for more details.
-        
-        # Arguments
-        - `opts`: an array of [Options]
-     */
-    pub fn cfg(&mut self, opts: &[Options]) -> &mut Self {
-        for &e in opts {
-            match e {
-                Options::NoIndex =>   self.flags |= 0b00000001,
-                Options::NoSymbol =>  self.flags |= 0b00000010,
-                Options::NoColor =>   self.flags |= 0b00000100,
-                Options::NoBold =>    self.flags |= 0b00001000,
-                Options::Plain =>     self.flags |= 0b00001100,
-                Options::Basic =>     self.flags |= 0b00001111,
-                Options::File => {
-                    self.flags |= 0b00010000;
-                    self.file = Some(
-                        std::io::BufWriter::new(
-                        std::fs::File::create("forestry.log").unwrap())
-                    );
-                },
-                Options::FileAt(f) => {
-                    self.flags |= 0b00010000;
-                    self.file = Some(
-                        std::io::BufWriter::new(
-                        f.try_clone().unwrap())
-                    );
-                },
-                Options::FileOnly =>  self.flags |= 0b00100000,
-                Options::Timer => {
-                    self.flags |= 0b01000000;
-                    self.timer = Some(std::time::Instant::now());
-                },
-                Options::TimerAt(t) => {
-                    self.flags |= 0b01000000;
-                    self.timer = Some(*t);
-                },
-                Options::Reset =>     self.flags &= 0b00000000,
-            }
-        }
-        self
-    }
-
-}
-
-#[cfg(not(feature = "async"))]
-impl Logger {
     fn fmt_header(&self, lvl: LogLevel) -> String {
         // If neither part of the header is desired, return a blank string.
         if self.flags & 0b0011 == 0b0011 {
@@ -143,18 +97,33 @@ impl Logger {
             tim = tim.bold();
         }
         #[allow(unused_assignments)]
-        let mut res = "".to_string();
+        let mut res = String::from("");
         if self.flags & 0b0011 == 0 {
-            res = format!("[{}:{}]", cnt, sym);
+            let cnt: String = cnt.to_string();
+            let sym: String = sym.to_string();
+            res.push('[');
+            res.push_str(&cnt);
+            res.push(':');
+            res.push_str(&sym);
+            res.push(']');
         } else if self.flags & 0b0001 == 0 {
-            res = format!("[{}]", cnt);
+            let cnt: String = cnt.to_string();
+            res.push('[');
+            res.push_str(&cnt);
+            res.push(']');
         } else {
-            res = format!("[{}]", sym);
+            let sym: String = sym.to_string();
+            res.push('[');
+            res.push_str(&sym);
+            res.push(']');
         }
         if self.flags & 0b01000000 != 0 {
-            res = format!("{}({})", res, tim);
+            let tim: String = tim.to_string();
+            res.push('(');
+            res.push_str(&tim);
+            res.push(')');
         }
-        res.push_str(" ");
+        res.push(' ');
         res
     }
 
@@ -195,6 +164,55 @@ impl Logger {
             }
         }
         fmt.to_string()
+    }
+}
+
+#[cfg(not(feature = "async"))]
+impl Logger {
+    /**
+        Configure the logger with options.
+        
+        See [Options] for more details.
+        
+        # Arguments
+        - `opts`: an array of [Options]
+     */
+    pub fn cfg(&mut self, opts: &[Options]) -> Result<&mut Self, io::Error> {
+        for &e in opts {
+            match e {
+                Options::NoIndex =>   self.flags |= 0b00000001,
+                Options::NoSymbol =>  self.flags |= 0b00000010,
+                Options::NoColor =>   self.flags |= 0b00000100,
+                Options::NoBold =>    self.flags |= 0b00001000,
+                Options::Plain =>     self.flags |= 0b00001100,
+                Options::Basic =>     self.flags |= 0b00001111,
+                Options::File => {
+                    self.flags |= 0b00010000;
+                    self.file = Some(
+                        io::BufWriter::new(
+                        File::create("forestry.log")?)
+                    );
+                },
+                Options::FileAt(f) => {
+                    self.flags |= 0b00010000;
+                    self.file = Some(
+                        io::BufWriter::new(
+                        f.try_clone()?)
+                    );
+                },
+                Options::FileOnly =>  self.flags |= 0b00100000,
+                Options::Timer => {
+                    self.flags |= 0b01000000;
+                    self.timer = Some(std::time::Instant::now());
+                },
+                Options::TimerAt(t) => {
+                    self.flags |= 0b01000000;
+                    self.timer = Some(*t);
+                },
+                Options::Reset =>     self.flags &= 0b00000000,
+            }
+        }
+        Ok(self)
     }
 
     /**
@@ -294,14 +312,20 @@ impl Logger {
 
     fn print(&mut self, lvl: LogLevel, string: &str) -> &mut Self {
         if self.flags & 0b00100000 == 0 {
-            eprintln!("{}{}", self.fmt_header(lvl), self.fmt_string(lvl, string));
+            let mut s: String = self.fmt_header(lvl);
+            s.push_str(&self.fmt_string(lvl, string));
+            s.push('\n');
+            io::stderr().write_all(s.as_bytes()).unwrap();
         }
 
         if self.flags & 0b00010000 != 0 {
             let temp = self.flags & 0b00001100;
             self.flags |= 0b00001100;
             // invoke buffered print here while formatting is temporarily plain
-            let plain = format!("{}{}\n", self.fmt_header(lvl), self.fmt_string(lvl, string));
+            let mut plain = String::from("");
+            plain.push_str(&self.fmt_header(lvl)); 
+            plain.push_str(&self.fmt_string(lvl, string));
+            plain.push('\n');
             if self.file.is_none() {
                 self.warn("File output enabled without file specified.");
             } else {
@@ -325,119 +349,50 @@ impl Logger {
 
 #[cfg(feature = "async")]
 impl Logger {
-    async fn fmt_header(&self, lvl: LogLevel) -> String {
-        // If neither part of the header is desired, return a blank string.
-        if self.flags & 0b0011 == 0b0011 {
-            return "".to_string();
-        }
-        let mut cnt: ColoredString = "".into();
-        let mut sym: ColoredString = "".into();
-        let mut tim: ColoredString = "".into();
-
-        if self.flags & 0b0001 == 0 {
-            cnt = format!("{:0>4x}", self.index).into();
-        }
-        if self.flags & 0b0010 == 0 {
-            sym = match lvl {
-                LogLevel::Info => "*".into(),
-                LogLevel::Warn => "~".into(),
-                LogLevel::Error => "!".into(),
-                LogLevel::Success => "+".into(),
-                LogLevel::Critical => "%".into(),
-            };
-        }
-        if self.flags & 0b01000000 != 0 {
-            let micros = self.timer.unwrap().elapsed().as_micros();
-            let msecs = micros as f64 / 1_000.0;
-            tim = format!("{:.3}ms", msecs).into();
-        }
-        if self.flags & 0b0100 == 0 {
-            match lvl {
-                LogLevel::Info => {
-                    cnt = cnt.blue();
-                    sym = sym.blue();
-                    tim = tim.blue();
+    /**
+        Configure the logger with options.
+        
+        See [Options] for more details.
+        
+        # Arguments
+        - `opts`: an array of [Options]
+     */
+    pub async fn cfg(&mut self, opts: &[Options<'_>]) -> Result<&mut Self, io::Error> {
+        for &e in opts {
+            match e {
+                Options::NoIndex =>   self.flags |= 0b00000001,
+                Options::NoSymbol =>  self.flags |= 0b00000010,
+                Options::NoColor =>   self.flags |= 0b00000100,
+                Options::NoBold =>    self.flags |= 0b00001000,
+                Options::Plain =>     self.flags |= 0b00001100,
+                Options::Basic =>     self.flags |= 0b00001111,
+                Options::File => {
+                    self.flags |= 0b00010000;
+                    self.file = Some(
+                        io::BufWriter::new(
+                        File::create("forestry.log").await?)
+                    );
                 },
-                LogLevel::Warn => {
-                    cnt = cnt.yellow();
-                    sym = sym.yellow();
-                    tim = tim.yellow();
+                Options::FileAt(f) => {
+                    self.flags |= 0b00010000;
+                    self.file = Some(
+                        io::BufWriter::new(
+                        f.try_clone().await?)
+                    );
                 },
-                LogLevel::Error => {
-                    cnt = cnt.red();
-                    sym = sym.red();
-                    tim = tim.red();
+                Options::FileOnly =>  self.flags |= 0b00100000,
+                Options::Timer => {
+                    self.flags |= 0b01000000;
+                    self.timer = Some(std::time::Instant::now());
                 },
-                LogLevel::Success => {
-                    cnt = cnt.green();
-                    sym = sym.green();
-                    tim = tim.green();
+                Options::TimerAt(t) => {
+                    self.flags |= 0b01000000;
+                    self.timer = Some(*t);
                 },
-                LogLevel::Critical => {
-                    cnt = cnt.on_red().white();
-                    sym = sym.on_red().white();
-                    tim = tim.on_red().white();
-                },
+                Options::Reset =>     self.flags &= 0b00000000,
             }
         }
-        if self.flags & 0b1000 == 0 {
-            cnt = cnt.bold();
-            sym = sym.bold();
-            tim = tim.bold();
-        }
-        #[allow(unused_assignments)]
-        let mut res = "".to_string();
-        if self.flags & 0b0011 == 0 {
-            res = format!("[{}:{}]", cnt, sym);
-        } else if self.flags & 0b0001 == 0 {
-            res = format!("[{}]", cnt);
-        } else {
-            res = format!("[{}]", sym);
-        }
-        if self.flags & 0b01000000 != 0 {
-            res = format!("{}({})", res, tim);
-        }
-        res.push_str(" ");
-        res
-    }
-
-    async fn fmt_string(&self, lvl: LogLevel, s: &str) -> String {
-        let mut fmt: ColoredString = s.into();
-        if self.flags & 0b0100 == 0 {
-            match lvl {
-                LogLevel::Info => {
-                    fmt = fmt.blue()
-                },
-                LogLevel::Warn => {
-                    fmt = fmt.yellow()
-                },
-                LogLevel::Error => {
-                    fmt = fmt.red()
-                },
-                LogLevel::Success => {
-                    fmt = fmt.green()
-                },
-                LogLevel::Critical => {
-                    fmt = fmt.on_red().white()
-                },
-            }
-        }
-        if self.flags & 0b1000 == 0 {
-            match lvl {
-                LogLevel::Info => {},
-                LogLevel::Warn => {},
-                LogLevel::Error => {
-                    fmt = fmt.bold()
-                },
-                LogLevel::Success => {
-                    fmt = fmt.bold()
-                },
-                LogLevel::Critical => {
-                    fmt = fmt.bold()
-                },
-            }
-        }
-        fmt.to_string()
+        Ok(self)
     }
 
     /**
@@ -542,14 +497,20 @@ impl Logger {
 
     async fn print(&mut self, lvl: LogLevel, string: &str) -> &mut Self {
         if self.flags & 0b00100000 == 0 {
-            eprintln!("{}{}", self.fmt_header(lvl).await, self.fmt_string(lvl, string).await);
+            let mut s: String = self.fmt_header(lvl);
+            s.push_str(&self.fmt_string(lvl, string));
+            s.push('\n');
+            io::stderr().write_all(s.as_bytes()).await.unwrap();
         }
 
         if self.flags & 0b00010000 != 0 {
             let temp = self.flags & 0b00001100;
             self.flags |= 0b00001100;
             // invoke buffered print here while formatting is temporarily plain
-            let plain = format!("{}{}\n", self.fmt_header(lvl).await, self.fmt_string(lvl, string).await);
+            let mut plain = String::from("");
+            plain.push_str(&self.fmt_header(lvl)); 
+            plain.push_str(&self.fmt_string(lvl, string));
+            plain.push('\n');
             if self.file.is_none() {
                 eprintln!("File output enabled without file specified.");
             } else {
@@ -557,6 +518,7 @@ impl Logger {
                     .as_mut()
                     .unwrap()
                     .write(plain.as_bytes())
+                    .await
                     .unwrap();
             }
             self.flags &= 0b11110011;
@@ -604,7 +566,7 @@ pub enum Options <'a> {
     /// Logs to the default file
     File,
     /// Logs to a specified file
-    FileAt(&'a std::fs::File),
+    FileAt(&'a File),
     /// Only logs to the file; requires `File` or `FileAt`.
     FileOnly,
     /// Include a timestamp in the log.
