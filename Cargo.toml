@@ -1,7 +1,7 @@
 [package]
 name = "forestry"
 description = "A simple cross-platform CLI logging library for Rust"
-version = "1.5.1"
+version = "1.6.0"
 edition = "2021"
 authors = ["uptu <uptu@uptu.dev>"]
 license = "MIT OR Apache-2.0"
@@ -12,10 +12,12 @@ keywords = ["logging", "cli", "console", "color", "string"]
 
 [features]
 plain = ["colored/no-color"]
-async = []
+async = ["tokio"]
 
 [dependencies]
 colored = "2.1.0"
 
-[dev-dependencies]
-futures = "0.3"
+[dependencies.tokio]
+version = "1.41"
+features = ["rt","io-std", "io-util", "fs", "macros"]
+optional = true
