@@ -84,7 +84,7 @@ First, add the `async` feature to `forestry` in your `Cargo.toml` file by changi
 forestry = { version = ">=1.5", features = ["async"] }
 ```
 
-or alternatively:
+or
 
 `Cargo.toml`
 ```toml
