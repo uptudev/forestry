@@ -1,14 +1,21 @@
 INSTALL_DIR:=/usr/local/lib
 HEADER_DIR:=/usr/local/include
 
-forestry: --cleandebug
-	@zig build-lib src/forestry.zig
-	@zig build-lib src/forestry.zig -dynamic
+forestry: --cleansimple
+	@zig build-lib src/forestry.zig -O ReleaseSmall -static
+	@zig build-lib src/forestry.zig -O ReleaseSmall -dynamic
+	@rm -f ./*.o ./*.obj
+	@mkdir -p out/release
+	@-mv -t out/release ./*.so ./*.dll ./*.dylib ./*.wasm 2>/dev/null || true
+	@-mv -t out/release ./*.a ./*.lib 2>/dev/null || true
+
+debug: --cleandebug
+	@zig build-lib src/forestry.zig -O Debug -static
+	@zig build-lib src/forestry.zig -O Debug -dynamic
 	@rm -f ./*.o ./*.obj
 	@mkdir -p out/debug
 	@-mv -t out/debug ./*.so ./*.dll ./*.dylib ./*.wasm 2>/dev/null || true
 	@-mv -t out/debug ./*.a ./*.lib 2>/dev/null || true
-	@cp ./forestry.h ./out/
 
 release: --cleanrelease
 	@read -rp "Enter version: " F_VERSION; \
@@ -54,11 +61,14 @@ clean:
 
 .PHONY: install
 install: forestry
-	install -m755 ./out/debug/libforestry.so ${INSTALL_DIR}
+	install -m644 ./out/debug/libforestry.so ${INSTALL_DIR}
 	install -m644 ./forestry.h ${HEADER_DIR}
 
 --cleandebug:
 	@rm -rf ./out/debug/*
 
 --cleanrelease:
-	@rm -rf ./out/release/*
+	@rm -rf ./out/release/*.tar.gz
+
+--cleansimple:
+	@rm -rf ./out/release/*.so ./out/release/*.dll ./out/release/*.dylib ./out/release/*.wasm ./out/release/*.a ./out/release/*.lib
