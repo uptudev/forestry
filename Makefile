@@ -42,6 +42,9 @@ release: --cleanrelease
 	tar -czf ./out/release/forestry_"$$F_VERSION"_macos_x86-64.tar.gz --add-file=./forestry.h -C ./out/release/x86_64/macos .; \
 	tar -czf ./out/release/forestry_"$$F_VERSION"_macos_aarch64.tar.gz --add-file=./forestry.h -C ./out/release/aarch64/macos .; \
 	tar -czf ./out/release/forestry_"$$F_VERSION"_wasm32.tar.gz --add-file=./forestry.h -C ./out/release/wasm32 .
+	@rm -r ./out/release/aarch64
+	@rm -r ./out/release/wasm32
+	@rm -r ./out/release/x86_64
 
 build: forestry release
 
