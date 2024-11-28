@@ -61,7 +61,14 @@ clean:
 
 .PHONY: install
 install: forestry
-	install -m644 ./out/debug/libforestry.so ${INSTALL_DIR}
+	install -m644 ./out/release/libforestry.so ${INSTALL_DIR}
+	install -m644 ./forestry.h ${HEADER_DIR}
+
+.PHONY: cleaninstall
+cleaninstall: forestry
+	@rm -f ${INSTALL_DIR}/libforestry.so
+	@rm -f ${HEADER_DIR}/forestry.h
+	install -m644 ./out/release/libforestry.so ${INSTALL_DIR}
 	install -m644 ./forestry.h ${HEADER_DIR}
 
 --cleandebug:
