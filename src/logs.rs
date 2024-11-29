@@ -37,8 +37,8 @@ impl Logger {
     }
 
     fn fmt_header(&self, lvl: LogLevel) -> String {
-        // If neither part of the header is desired, return a blank string.
-        if self.flags & 0b0011 == 0b0011 {
+        // If no part of the header is desired, return a blank string.
+        if self.flags & 0b01000011 == 0b01000011 {
             return "".to_string();
         }
         let mut cnt: ColoredString = "".into();
