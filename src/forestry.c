@@ -8,7 +8,7 @@
  *
  *  Copyright 2024 uptu <uptu@uptu.dev>
  */
-#include "util/forestry.h"
+#include "forestry.h"
 
 static uint16_t INDEX = 0x0000;     // Index of the current log message
 static char FLAGS = 0b0000;         // Format flags for the current log message
