@@ -77,6 +77,7 @@ void safe_char_insert(char c, int *i) {
         return;
     }
     fprintf(stderr, BUFF_OF_ERROR, *i, BUF_SIZE);
+    free(BUF)
     exit(1);
 }
 
