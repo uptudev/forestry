@@ -1,5 +1,6 @@
 # executable shouldn't be in the repo
 test
+libforestry*
 
 # no coredumps 
 CORE-*
