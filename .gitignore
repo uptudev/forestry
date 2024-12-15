@@ -1,0 +1,5 @@
+# executable shouldn't be in the repo
+ctr
+
+# no coredumps 
+CORE-*
