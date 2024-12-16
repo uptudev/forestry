@@ -1,6 +1,12 @@
-# executable shouldn't be in the repo
-test
+# built libs/bins shouldn't be in the repo
+forestry_test
 libforestry*
 
 # no coredumps 
 CORE-*
+
+# no CMake cache files
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+Makefile
