@@ -30,7 +30,25 @@ cd forestry
 
 The `./build.sh` script will prompt the user whether they want to install the library to the system. If the user chooses to install the library, the script will copy the files to subdirectories of `/usr/local/` by default.
 
-To ensure the library is installed correctly, you can run the test script by running the following commands:
+Once the library is installed, you can include the header file in your project and link the library as follows:
+
+```c
+#include <forestry.h>
+
+int main() {
+    log_info("Hello, world!");
+    log_deinit();
+    return 0;
+}
+```
+
+This should print the following message to the console with ANSI colouring:
+
+```plaintext
+[0000:*] Hello, world!
+```
+
+To ensure the library compiled and linked correctly, you can run the test script by running the following commands:
 
 ```bash
 # Run the test program
