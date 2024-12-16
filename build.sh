@@ -53,7 +53,7 @@ cmake .. -DCMAKE_BUILD_TYPE=Release --fresh ||
     (printf "$CMAKE_FAIL" && exit)
 # Run make to build the project
 printf "$MAKE_STR"
-make ||
+cmake --build .. --config Release ||
     (printf "$MAKE_FAIL" && exit)
 # Hardlink the header file to the build directory
 printf "$COPY_STR"
@@ -63,7 +63,7 @@ ln ../include/forestry.h . ||
 printf "$ASK_INSTALL"
 read -r QUERY_INSTALL
 case $QUERY_INSTALL in
-    y|Y) sudo make install || 
+    y|Y) sudo cmake --install . || 
         (printf "$INSTALL_FAIL" && exit) ;;
     *) ;;
 esac

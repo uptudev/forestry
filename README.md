@@ -5,6 +5,8 @@
 ## Contents
 
 * [Installation](#installation)
+  * [Linux/BSD/*NIX](#linuxbsdunix)
+  * [Windows](#windows)
 * [Usage](#usage)
   * [Closing scope](#closing-scope)
   * [Logging](#logging)
@@ -17,7 +19,7 @@
 ## Installation
 
 Installation is reliant on CMake and a C compiler at the bare minimum.
-We recommend that you have a Unix-like system with GNU Make as well to make full use of the automated build script.
+We recommend that you have a UNIX-like system with a shell prompt to make full use of the automated build script.
 
 ### Linux/BSD/*NIX
 
@@ -35,6 +37,24 @@ cd forestry
 The `./build.sh` script will prompt the user whether they want to install the library to the system.
 If the user chooses to install the library, the script will copy the files to subdirectories of `/usr/local/` by default.
 The shared library will be copied to `/usr/local/lib/`, the static library will be copied to `/usr/local/lib/forestry/` and the header file will be copied to `/usr/local/include/`.
+
+### Windows
+
+The library can be installed on Windows by cloning the repository and manually running CMake as follows:
+
+```cmd
+git clone -b c https://github.com/uptudev/forestry.git --single-branch
+cd forestry
+mkdir build
+cd build
+cmake ..
+cmake --build . --config Release
+cmake --install .
+```
+
+The shared library will be in the `build` directory, and the static library will be in the `build/forestry` directory.
+
+## Usage
 
 Once the library is installed, you can include the header file in your project and link the library as follows:
 
@@ -73,9 +93,6 @@ the following log messages (the log file name is dependent when the test runs):
 [0004:%] CRITICAL ERROR
 [0005:?] DEBUG
 ```
-
-## Usage
-
 ### Closing scope
 
 * `void log_deinit()`: Closes the logger and frees its resources.
