@@ -1,4 +1,4 @@
-# libforestry
+# forestry
 
 `forestry` is a simplistic logging library meant to quickly add logging to your C project.
 
@@ -28,6 +28,8 @@ cd forestry
 ./build.sh
 ```
 
+The `./build.sh` script will prompt the user whether they want to install the library to the system. If the user chooses to install the library, the script will copy the files to subdirectories of `/usr/local/` by default.
+
 To ensure the library is installed correctly, you can run the test script by running the following commands:
 
 ```bash
@@ -45,8 +47,6 @@ There should now be a `.log` file in the current directory with the following lo
 [0004:%] CRITICAL ERROR
 [0005:?] DEBUG
 ```
-
-If you see the above messages, the library is installed correctly. You can now install the library to your system by running `cmake --install build`.
 
 ## Usage
 
@@ -89,24 +89,8 @@ as it frees the heap buffer and any file handles given to `set_log_file()`.
 
 ## Contributing
 
-**Outline your contribution guidelines.**
-Explain how users can contribute to your project,
-whether through code, bug reports, or documentation improvements.
-Specify preferred code style, pull request format, and testing procedures.
+If you would like to contribute to forestry, please open an issue or submit a pull request.
 
 ## License
 
-**Specify the license that you plan to distribute your project under.**
-Use clear and concise language, and link to the full license text.
-
-## Miscellaneous
-
-**Include any other relevant information you want to share.**
-This could be links to related projects, documentation,
-support channels, or your contact information.
-
-**Remember:**
-
-* Keep your README.md file concise and focused.
-* Use clear headings, formatting, and visuals for readability.
-* Update your README.md file regularly to reflect changes in your project.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
