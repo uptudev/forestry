@@ -36,23 +36,30 @@ readonly DEL_ART_STR="\x1b[0m[\x1b[34m*\x1b[0m] \x1b[34mDeleting build artifacts
 readonly DEL_ART_FAIL="\x1b[0m[\x1b[37;41m%%\x1b[0m] \x1b[37;41;1mFailed to delete build artifacts!\x1b[0m\n"
 readonly BUILD_COMPLETE="\x1b[0m[\x1b[32m+\x1b[0m] \x1b[32;1mBuild complete!\x1b[0m\n"
 
+# Clean build directory if it exists
 printf "$CLEAN_STR"
 rm -rf ./build || 
     (printf "$CLEAN_FAIL" && exit)
+# Create build directory
 printf "$BUILD_DIR_STR"
 mkdir -p build || 
     (printf "$BUILD_FAIL" && exit)
+# Change working directory to build directory
 cd build || 
     (printf "$BUILD_CD_FAIL" && exit)
+# Run cmake to generate build files
 printf "$CMAKE_STR"
 cmake .. -DCMAKE_BUILD_TYPE=Release --fresh || 
     (printf "$CMAKE_FAIL" && exit)
+# Run make to build the project
 printf "$MAKE_STR"
 make ||
     (printf "$MAKE_FAIL" && exit)
+# Hardlink the header file to the build directory
 printf "$COPY_STR"
 ln ../include/forestry.h . || 
     (printf "$COPY_FAIL" && exit)
+# Ask user if they want to install the library to their system
 printf "$ASK_INSTALL"
 read -r QUERY_INSTALL
 case $QUERY_INSTALL in
@@ -60,7 +67,9 @@ case $QUERY_INSTALL in
         (printf "$INSTALL_FAIL" && exit) ;;
     *) ;;
 esac
+# Delete build artifacts
 printf "$DEL_ART_STR"
 rm -rf ./CMakeFiles ./CMakeCache.txt ./Makefile ./cmake_install.cmake || 
     (printf "$DEL_ART_FAIL" && exit)
+# Print build success message
 printf "$BUILD_COMPLETE"
