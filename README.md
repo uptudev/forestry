@@ -103,7 +103,7 @@ as it frees the heap buffer and any file handles given to `set_log_file()`.
 `LogOptions` is an enumerator with the following members:
 
 * `NO_INDEX`: Disables the index in the log message.
-* `NO_SYMBOL`: Disables the log level symbol ('*', '~', etc.) in the log message.
+* `NO_SYMBOL`: Disables the log level symbol in the log message.
 * `NO_COLOR`: Disables the ANSI colouring in the log message.
 * `NO_BOLD`: Disables the ANSI bold text in the log message.
 * `PLAIN`: Removes all ANSI escape sequences from the log message.
@@ -115,7 +115,7 @@ as it frees the heap buffer and any file handles given to `set_log_file()`.
 
 ## Contributing
 
-If you would like to contribute to forestry, please open an issue or submit a pull request.
+If you want to contribute to forestry, open an issue or submit a pull request.
 
 ## License
 
