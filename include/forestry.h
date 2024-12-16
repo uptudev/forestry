@@ -16,15 +16,15 @@ typedef enum {
     LOG_FILE,
     ONLY_FILE,
     RESET,
-} FormatOptions;
-void set_log_opt(const FormatOptions opt);
+} LogOptions;
+void set_log_opt(const LogOptions opt);
 void set_log_timer(clock_t start);
 void set_log_file(FILE *restrict file);
-void info(char *restrict msg);
-void warning(char *restrict msg);
-void error(char *restrict msg);
-void success(char *restrict msg);
-void critical(char *restrict msg);
-void debug(char *restrict msg);
+void log_info(char *restrict msg);
+void log_warning(char *restrict msg);
+void log_error(char *restrict msg);
+void log_success(char *restrict msg);
+void log_critical(char *restrict msg);
+void log_debug(char *restrict msg);
 void log_deinit();
 #endif  // _FORESTRY_H

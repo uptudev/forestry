@@ -11,12 +11,12 @@
 int main() {
     set_log_opt(ONLY_FILE);
     set_log_opt(PLAIN);
-    info("INFO");
-    warning("WARNING");
-    error("ERROR");
-    success("SUCCESS");
-    critical("CRITICAL ERROR");
-    debug("DEBUG");
+    log_info("INFO");
+    log_warning("WARNING");
+    log_error("ERROR");
+    log_success("SUCCESS");
+    log_critical("CRITICAL ERROR");
+    log_debug("DEBUG");
     log_deinit();
     return 0;
 }

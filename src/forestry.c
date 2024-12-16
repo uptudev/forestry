@@ -54,12 +54,12 @@ typedef enum {
 } LogLevel;
 
 /*
- * set_log_opts(const FormatOptions *restrict opts, unsigned int len)
+ * set_log_opts(const LogOptions *restrict opts, unsigned int len)
  *
- * Takes an array of FormatOptions and the length of the array.
- * Sets the FLAGS static variable to reflect the desired FormatOptions.
+ * Takes an array of LogOptions and the length of the array.
+ * Sets the FLAGS static variable to reflect the desired LogOptions.
  */
-void set_log_opt(const FormatOptions opt) {
+void set_log_opt(const LogOptions opt) {
     switch (opt) {
         case NO_INDEX:
             FLAGS |= 0b0001;
@@ -416,7 +416,7 @@ void log_print(LogLevel lvl, char *restrict msg) {
  *
  * Logs an INFO message to stderr.
  */
-void info(char *restrict msg) {
+void log_info(char *restrict msg) {
     log_print(INFO, msg);
 }
 
@@ -425,7 +425,7 @@ void info(char *restrict msg) {
  *
  * Logs a WARN message to stderr.
  */
-void warning(char *restrict msg) {
+void log_warning(char *restrict msg) {
     log_print(WARNING, msg);
 }
 
@@ -434,7 +434,7 @@ void warning(char *restrict msg) {
  *
  * Logs an ERROR message to stderr.
  */
-void error(char *restrict msg) {
+void log_error(char *restrict msg) {
     log_print(ERROR, msg);
 }
 
@@ -443,7 +443,7 @@ void error(char *restrict msg) {
  *
  * Logs a SUCCESS message to stderr.
  */
-void success(char *restrict msg) {
+void log_success(char *restrict msg) {
     log_print(SUCCESS, msg);
 }
 
@@ -452,7 +452,7 @@ void success(char *restrict msg) {
  *
  * Logs a CRITICAL error message to stderr.
  */
-void critical(char *restrict msg) {
+void log_critical(char *restrict msg) {
     log_print(CRITICAL, msg);
 }
 
@@ -461,6 +461,6 @@ void critical(char *restrict msg) {
  *
  * Logs a DEBUG message to stderr.
  */
-void debug(char *restrict msg) {
+void log_debug(char *restrict msg) {
     log_print(DEBUG, msg);
 }
