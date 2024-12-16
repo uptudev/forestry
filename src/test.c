@@ -1,9 +1,9 @@
 /*
- *  ctr
+ *  test.c
+ *  ^^^^^^
+ *  This is a simple test program for forestry.
  *  
- *  ctr is a quick C rewrite of the GNU coreutils tr command.
- *  
- *  Copyright 2024 uptu <uptu@uptu.dev>
+ *  See LICENSE file for licensing information.
  */
 
 #include "forestry.h"

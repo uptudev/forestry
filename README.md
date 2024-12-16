@@ -6,8 +6,8 @@
 
 * [Installation](#installation)
 * [Usage](#usage)
-  * [Logging](#logging)
   * [Closing scope](#closing-scope)
+  * [Logging](#logging)
   * [Configuration](#configuration)
     * [Formatting](#formatting)
 * [Contributing](#contributing)
@@ -53,6 +53,13 @@ There should now be a `.log` file in the current directory with the following lo
 
 ## Usage
 
+### Closing scope
+
+* `void log_deinit()`: Closes the logger and frees its resources.
+
+Programmers **must** call this at the end of the program to avoid memory leaks,
+as it frees the heap buffer and any file handles given to `set_log_file()`.
+
 ### Logging
 
 * `void log_info(char *message)`: Logs an info message.
@@ -61,13 +68,6 @@ There should now be a `.log` file in the current directory with the following lo
 * `void log_success(char *message)`: Logs a success message.
 * `void log_critical(char *message)`: Logs a critical message.
 * `void log_debug(char *message)`: Logs a debug message.
-
-### Closing scope
-
-* `void log_deinit()`: Closes the logger and frees its resources.
-
-Programmers **must** call this at the end of the program to avoid memory leaks,
-as it frees the heap buffer and any file handles given to `set_log_file()`.
 
 ### Configuration
 

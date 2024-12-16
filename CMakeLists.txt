@@ -1,3 +1,4 @@
+# See LICENSE file for license information.
 cmake_minimum_required(VERSION 3.10)
 project(
     forestry 

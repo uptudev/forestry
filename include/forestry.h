@@ -1,3 +1,15 @@
+/*
+ *  forestry.h
+ *  ^^^^^^^^^^
+ *
+ *  forestry is a simple logging library for C.
+ *  It provides a simple interface for logging messages to the console.
+ *  forestry is designed to be simple to use and easy to integrate into existing projects.
+ *  It also uses arena allocation to reduce the number of syscalls and increase memory safety.
+ *
+ *  See LICENSE file for licensing information.
+ */
+
 #ifndef _FORESTRY_H
 #define _FORESTRY_H
 #define _POSIX_C_SOURCE 199309L
