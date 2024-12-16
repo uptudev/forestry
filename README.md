@@ -79,7 +79,7 @@ you can run the test script by running the following commands:
 
 ```bash
 # Run the test program
-./build/forestry_test
+./build/test
 ```
 
 There should now be a `.log` file in the current directory with

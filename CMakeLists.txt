@@ -26,13 +26,13 @@ target_include_directories(
 
 # Add test executable
 add_executable(
-    ${PROJECT_NAME}_test
+    test
     src/test.c)
 target_include_directories(
-    ${PROJECT_NAME}_test
+    test
     PRIVATE include)
 target_link_libraries(
-    ${PROJECT_NAME}_test
+    test
     ${PROJECT_NAME}_static)
 
 # Library installation rules
