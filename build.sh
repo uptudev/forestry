@@ -28,10 +28,12 @@ readonly CMAKE_STR="\x1b[0m[\x1b[34m*\x1b[0m] \x1b[34mRunning cmake...\x1b[0m\n"
 readonly CMAKE_FAIL="\x1b[0m[\x1b[37;41m%%\x1b[0m] \x1b[37;41;1mFailed to run cmake!\x1b[0m\n"
 readonly MAKE_STR="\x1b[0m[\x1b[34m*\x1b[0m] \x1b[34mRunning make...\x1b[0m\n"
 readonly MAKE_FAIL="\x1b[0m[\x1b[37;41m%%\x1b[0m] \x1b[37;41;1mFailed to run make!\x1b[0m\n"
-readonly DEL_ART_STR="\x1b[0m[\x1b[34m*\x1b[0m] \x1b[34mDeleting build artifacts...\x1b[0m\n"
-readonly DEL_ART_FAIL="\x1b[0m[\x1b[37;41m%%\x1b[0m] \x1b[37;41;1mFailed to delete build artifacts!\x1b[0m\n"
 readonly COPY_STR="\x1b[0m[\x1b[34m*\x1b[0m] \x1b[34mHardlinking header to build directory...\x1b[0m\n"
 readonly COPY_FAIL="\x1b[0m[\x1b[37;41m%%\x1b[0m] \x1b[37;41;1mFailed to hardlink header to build directory!\x1b[0m\n"
+readonly ASK_INSTALL="\x1b[0m\x1b[33mInstall the library?\x1b[0m [\x1b[32my\x1b[0m/\x1b[31mN\x1b[0m]: "
+readonly INSTALL_FAIL="\x1b[0m[\x1b[37;41m%%\x1b[0m] \x1b[37;41;1mFailed to install the library!\x1b[0m\n"
+readonly DEL_ART_STR="\x1b[0m[\x1b[34m*\x1b[0m] \x1b[34mDeleting build artifacts...\x1b[0m\n"
+readonly DEL_ART_FAIL="\x1b[0m[\x1b[37;41m%%\x1b[0m] \x1b[37;41;1mFailed to delete build artifacts!\x1b[0m\n"
 readonly BUILD_COMPLETE="\x1b[0m[\x1b[32m+\x1b[0m] \x1b[32;1mBuild complete!\x1b[0m\n"
 
 printf "$CLEAN_STR"
@@ -48,10 +50,17 @@ cmake .. -DCMAKE_BUILD_TYPE=Release --fresh ||
 printf "$MAKE_STR"
 make ||
     (printf "$MAKE_FAIL" && exit)
-printf "$DEL_ART_STR"
-rm -rf ./CMakeFiles ./CMakeCache.txt ./Makefile ./cmake_install.cmake || 
-    (printf "$DEL_ART_FAIL" && exit)
 printf "$COPY_STR"
 ln ../include/forestry.h . || 
     (printf "$COPY_FAIL" && exit)
+printf "$ASK_INSTALL"
+read -r QUERY_INSTALL
+case $QUERY_INSTALL in
+    y|Y) sudo make install || 
+        (printf "$INSTALL_FAIL" && exit) ;;
+    *) ;;
+esac
+printf "$DEL_ART_STR"
+rm -rf ./CMakeFiles ./CMakeCache.txt ./Makefile ./cmake_install.cmake || 
+    (printf "$DEL_ART_FAIL" && exit)
 printf "$BUILD_COMPLETE"

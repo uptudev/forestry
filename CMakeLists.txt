@@ -41,20 +41,14 @@ target_link_libraries(
     ${PROJECT_NAME}_test
     ${PROJECT_NAME}_static)
 
-# Install rules
-# Shared library
+# Installing rules
 install(
-    TARGETS ${PROJECT_NAME}
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib/${PROJECT_NAME})
+    TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_static
+    RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+    LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/${PROJECT_NAME})
 
-# Static library
+# Install forestry.h
 install(
-    TARGETS ${PROJECT_NAME}_static
-    DESTINATION lib/${PROJECT_NAME})
-
-# Include
-install(
-    DIRECTORY ${FORESTRY_INCLUDE}
-    DESTINATION include)
+    FILES ${FORESTRY_INCLUDE}/forestry.h
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/include)

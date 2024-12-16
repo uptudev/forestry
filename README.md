@@ -16,28 +16,23 @@
 
 ## Installation
 
-This library can be installed bu cloning the repository, then running build commands to generate the shared library:
+Installation is reliant on CMake and a C compiler at the bare minimum. We recommend that you have a Unix-like system with GNU Make as well to make full use of the automated build script.
+
+This library can be installed bu cloning the repository, then running the build script. The build script will create a `build` directory and compile the library and test program.
 
 ```bash
 # Clone the 'c' branch of the repository (the default Rust branch is 'main')
 git clone -b c https://github.com/uptudev/forestry.git --single-branch
 cd forestry
-# Configure the build with CMake
-cmake . -DCMAKE_BUILD_TYPE=Release
-# Build the shared library
-make forestry
-# OR
-# Build a static library
-make forestry_static
+# Run the build script
+./build.sh
 ```
 
 To ensure the library is installed correctly, you can run the test script by running the following commands:
 
 ```bash
-# Build the test program
-make forestry_test
 # Run the test program
-./forestry_test
+./build/forestry_test
 ```
 
 There should now be a `.log` file in the current directory with the following log messages (the log file name is dependent when the test runs):
@@ -50,6 +45,8 @@ There should now be a `.log` file in the current directory with the following lo
 [0004:%] CRITICAL ERROR
 [0005:?] DEBUG
 ```
+
+If you see the above messages, the library is installed correctly. You can now install the library to your system by running `cmake --install build`.
 
 ## Usage
 
