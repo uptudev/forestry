@@ -91,7 +91,7 @@ void set_log_opt(const LogOptions opt) {
             FLAGS |= 0b00110000;
             break;
         case RESET:
-            FLAGS &= 0b0000;
+            FLAGS = 0b00000000;
             break;
     }
 }
