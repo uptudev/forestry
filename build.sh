@@ -1,5 +1,4 @@
 #!/bin/sh
-# See LICENSE file for license information.
 
 # build.sh
 # ^^^^^^^^
@@ -18,6 +17,7 @@
 # The script is intended to be run from the root of the project directory.
 # The script is intended to be run on a Unix-like system with a bash shell, GNU Make, and CMake.
 # For other systems, manual execution of the substituted commands is required.
+# See LICENSE file for license information.
 
 readonly CLEAN_STR="\x1b[0m[\x1b[34m*\x1b[0m] \x1b[34mCleaning build directory...\x1b[0m\n"
 readonly CLEAN_FAIL="\x1b[0m[\x1b[37;41m%%\x1b[0m] \x1b[37;41;1mFailed to clean build directory!\x1b[0m\n"
