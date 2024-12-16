@@ -27,6 +27,8 @@ static FILE *restrict L_FILE = NULL;
 /* CONSTANTS */
 // Heap buffer size
 const int BUF_SIZE = 16;
+// File name max length
+const int FILE_NAME_MAX = 32;
 // CPU-specific value for division
 const double CLOCKS_PER_MS =
     CLOCKS_PER_SEC / 1000;
@@ -82,15 +84,9 @@ void set_log_opt(const FormatOptions opt) {
             break;
         case LOG_FILE:
             FLAGS |= 0b00010000;
-            if (NULL == L_FILE) {
-                L_FILE = fopen("log.txt", "w");
-            }
             break;
         case ONLY_FILE:
             FLAGS |= 0b00110000;
-            if (NULL == L_FILE) {
-                L_FILE = fopen("log.txt", "w");
-            }
             break;
         case RESET:
             FLAGS &= 0b0000;
@@ -134,6 +130,16 @@ void log_deinit() {
     free(BUF);
 }
 
+FILE *gen_log_file() {
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
+    uint64_t us = ((uint64_t)ts.tv_sec * 1000000) + ((uint64_t)ts.tv_nsec / 1000);
+    char filename[FILE_NAME_MAX];
+    snprintf(filename, FILE_NAME_MAX, "%x.log", us);
+    FILE *file = fopen(filename, "w");
+    return file;
+}
+
 /*
  * flush_buf(int *restrict i)
  *
@@ -141,7 +147,10 @@ void log_deinit() {
  */
 void flush_buf(int *restrict i) {
     if (0 == (FLAGS & 0b00100000)) fputs(BUF, stderr);
-    if ((0 != (FLAGS & 0b00010000)) && (NULL != L_FILE)) {
+    if (0 != (FLAGS & 0b00010000)) {
+        if (NULL == L_FILE) {
+            L_FILE = gen_log_file();
+        }
         fputs(BUF, L_FILE);
     }
     *i = 0;

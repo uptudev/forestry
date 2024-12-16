@@ -11,5 +11,5 @@ CMakeFiles
 cmake_install.cmake
 Makefile
 
-# test log should be ignored if ran in the same directory
-log.txt
+# test logs should be ignored if ran in the same directory
+*.log
