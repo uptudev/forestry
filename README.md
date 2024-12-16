@@ -28,7 +28,7 @@ cd forestry
 ./build.sh
 ```
 
-The `./build.sh` script will prompt the user whether they want to install the library to the system. If the user chooses to install the library, the script will copy the files to subdirectories of `/usr/local/` by default.
+The `./build.sh` script will prompt the user whether they want to install the library to the system. If the user chooses to install the library, the script will copy the files to subdirectories of `/usr/local/` (\*NIX/BSD) or `C:\Program Files\forestry\` (Windows) by default.
 
 Once the library is installed, you can include the header file in your project and link the library as follows:
 
