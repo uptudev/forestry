@@ -16,11 +16,13 @@
 
 ## Installation
 
-Installation is reliant on CMake and a C compiler at the bare minimum. We recommend that you have a Unix-like system with GNU Make as well to make full use of the automated build script.
+Installation is reliant on CMake and a C compiler at the bare minimum.
+We recommend that you have a Unix-like system with GNU Make as well to make full use of the automated build script.
 
 ### Linux/BSD/*NIX
 
-This library can be installed by cloning the repository, then running the build script. The build script will create a `build` directory and compile the libraries and test program.
+This library can be installed by cloning the repository, then running the build script.
+The build script will create a `build` directory and compile the libraries and test program.
 
 ```bash
 # Clone the 'c' branch of the repository (the default Rust branch is 'main')
@@ -30,7 +32,8 @@ cd forestry
 ./build.sh
 ```
 
-The `./build.sh` script will prompt the user whether they want to install the library to the system. If the user chooses to install the library, the script will copy the files to subdirectories of `/usr/local/` by default.
+The `./build.sh` script will prompt the user whether they want to install the library to the system.
+If the user chooses to install the library, the script will copy the files to subdirectories of `/usr/local/` by default.
 The shared library will be copied to `/usr/local/lib/`, the static library will be copied to `/usr/local/lib/forestry/` and the header file will be copied to `/usr/local/include/`.
 
 Once the library is installed, you can include the header file in your project and link the library as follows:
@@ -51,14 +54,16 @@ This should print the following message to the console with ANSI colouring:
 [0000:*] Hello, world!
 ```
 
-To ensure the library compiled and linked correctly, you can run the test script by running the following commands:
+To ensure the library compiled and linked correctly,
+you can run the test script by running the following commands:
 
 ```bash
 # Run the test program
 ./build/forestry_test
 ```
 
-There should now be a `.log` file in the current directory with the following log messages (the log file name is dependent when the test runs):
+There should now be a `.log` file in the current directory with
+the following log messages (the log file name is dependent when the test runs):
 
 ```plaintext
 [0000:*] INFO
