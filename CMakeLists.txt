@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(
     forestry 
-    VERSION 0.1.0
+    VERSION 1.0.0
     DESCRIPTION "A simple, fast, and efficient logging library for C.")
 
 # Add shared library
