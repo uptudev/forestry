@@ -24,8 +24,8 @@
 # Info log strings
 readonly CLEAN_STR="\x1b[0m[\x1b[34m*\x1b[0m] \x1b[34mCleaning build directory...\x1b[0m\n"
 readonly BUILD_DIR_STR="\x1b[0m[\x1b[34m*\x1b[0m] \x1b[34mCreating build directory...\x1b[0m\n"
-readonly CMAKE_STR="\x1b[0m[\x1b[34m*\x1b[0m] \x1b[34mRunning cmake...\x1b[0m\n"
-readonly MAKE_STR="\x1b[0m[\x1b[34m*\x1b[0m] \x1b[34mRunning make...\x1b[0m\n"
+readonly CMAKE_STR="\x1b[0m[\x1b[34m*\x1b[0m] \x1b[34mRunning CMake...\x1b[0m\n"
+readonly BUILD_STR="\x1b[0m[\x1b[34m*\x1b[0m] \x1b[34mBuilding...\x1b[0m\n"
 readonly COPY_STR="\x1b[0m[\x1b[34m*\x1b[0m] \x1b[34mHardlinking header to build directory...\x1b[0m\n"
 readonly DEL_ART_STR="\x1b[0m[\x1b[34m*\x1b[0m] \x1b[34mDeleting build artifacts...\x1b[0m\n"
 
@@ -37,10 +37,10 @@ readonly BUILD_COMPLETE="\x1b[0m[\x1b[32;1m+\x1b[0m] \x1b[32;1mBuild complete!\x
 
 # Error log strings
 readonly CLEAN_FAIL="\x1b[0m[\x1b[37;41;1m%%\x1b[0m] \x1b[37;41;1mFailed to clean build directory!\x1b[0m\n"
-readonly BUILD_FAIL="\x1b[0m[\x1b[37;41;1m%%\x1b[0m] \x1b[37;41;1mFailed to create build directory!\x1b[0m\n"
+readonly BUILD_DIR_FAIL="\x1b[0m[\x1b[37;41;1m%%\x1b[0m] \x1b[37;41;1mFailed to create build directory!\x1b[0m\n"
 readonly BUILD_CD_FAIL="\x1b[0m[\x1b[37;41;1m%%\x1b[0m] \x1b[37;41;1mFailed to cd into build directory!\x1b[0m\n"
-readonly CMAKE_FAIL="\x1b[0m[\x1b[37;41;1m%%\x1b[0m] \x1b[37;41;1mFailed to run cmake!\x1b[0m\n"
-readonly MAKE_FAIL="\x1b[0m[\x1b[37;41;1m%%\x1b[0m] \x1b[37;41;1mFailed to run make!\x1b[0m\n"
+readonly CMAKE_FAIL="\x1b[0m[\x1b[37;41;1m%%\x1b[0m] \x1b[37;41;1mFailed to run CMake!\x1b[0m\n"
+readonly BUILD_FAIL="\x1b[0m[\x1b[37;41;1m%%\x1b[0m] \x1b[37;41;1mFailed to build using the default build tool (usually GNU Make)!\x1b[0m\n"
 readonly COPY_FAIL="\x1b[0m[\x1b[37;41;1m%%\x1b[0m] \x1b[37;41;1mFailed to hardlink header to build directory!\x1b[0m\n"
 readonly INSTALL_FAIL="\x1b[0m[\x1b[37;41;1m%%\x1b[0m] \x1b[37;41;1mFailed to install the library!\x1b[0m\n"
 readonly DEL_ART_FAIL="\x1b[0m[\x1b[37;41;1m%%\x1b[0m] \x1b[37;41;1mFailed to delete build artifacts!\x1b[0m\n"
@@ -54,7 +54,7 @@ rm -rf ./build ||
 # Create build directory
 printf "$BUILD_DIR_STR"
 mkdir -p build || 
-    (printf "$BUILD_FAIL" && exit)
+    (printf "$BUILD_DIR_FAIL" && exit)
 # Change working directory to build directory
 cd build || 
     (printf "$BUILD_CD_FAIL" && exit)
@@ -63,9 +63,9 @@ printf "$CMAKE_STR"
 cmake .. -DCMAKE_BUILD_TYPE=Release --fresh || 
     (printf "$CMAKE_FAIL" && exit)
 # Run make to build the project
-printf "$MAKE_STR"
+printf "$BUILD_STR"
 cmake --build .. --config Release ||
-    (printf "$MAKE_FAIL" && exit)
+    (printf "$BUILD_FAIL" && exit)
 # Hardlink the header file to the build directory
 printf "$COPY_STR"
 ln ../include/forestry.h . || 
