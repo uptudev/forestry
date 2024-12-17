@@ -38,7 +38,6 @@ readonly BUILD_COMPLETE="\x1b[0m[\x1b[32;1m+\x1b[0m] \x1b[32;1mBuild complete!\x
 # Error log strings
 readonly CLEAN_FAIL="\x1b[0m[\x1b[37;41;1m%%\x1b[0m] \x1b[37;41;1mFailed to clean build directory!\x1b[0m\n"
 readonly BUILD_DIR_FAIL="\x1b[0m[\x1b[37;41;1m%%\x1b[0m] \x1b[37;41;1mFailed to create build directory!\x1b[0m\n"
-readonly BUILD_CD_FAIL="\x1b[0m[\x1b[37;41;1m%%\x1b[0m] \x1b[37;41;1mFailed to cd into build directory!\x1b[0m\n"
 readonly CMAKE_FAIL="\x1b[0m[\x1b[37;41;1m%%\x1b[0m] \x1b[37;41;1mFailed to run CMake!\x1b[0m\n"
 readonly BUILD_FAIL="\x1b[0m[\x1b[37;41;1m%%\x1b[0m] \x1b[37;41;1mFailed to build using the default build tool (usually GNU Make)!\x1b[0m\n"
 readonly COPY_FAIL="\x1b[0m[\x1b[37;41;1m%%\x1b[0m] \x1b[37;41;1mFailed to hardlink header to build directory!\x1b[0m\n"
@@ -47,40 +46,38 @@ readonly DEL_ART_FAIL="\x1b[0m[\x1b[37;41;1m%%\x1b[0m] \x1b[37;41;1mFailed to de
 
 # * Procedure *
 
-# Clean build directory if it exists
+# Clean build directory if anything is present within it
 printf "$CLEAN_STR"
-rm -rf ./build || 
-    (printf "$CLEAN_FAIL" && exit)
-# Create build directory
+rm -rf ./build/* || 
+    { printf "$CLEAN_FAIL" && exit 1; }
+# Create build directory if it does not exista and change working directory to it
 printf "$BUILD_DIR_STR"
-mkdir -p build || 
-    (printf "$BUILD_DIR_FAIL" && exit)
-# Change working directory to build directory
-cd build || 
-    (printf "$BUILD_CD_FAIL" && exit)
+{ mkdir -p build && cd ./build; } || 
+    { printf "$BUILD_DIR_FAIL" && exit 1; }
 # Run cmake to generate build files
 printf "$CMAKE_STR"
-cmake .. -DCMAKE_BUILD_TYPE=Release --fresh || 
-    (printf "$CMAKE_FAIL" && exit)
+cmake .. || 
+    { printf "$CMAKE_FAIL" && exit 1; }
 # Run make to build the project
 printf "$BUILD_STR"
-cmake --build .. --config Release ||
-    (printf "$BUILD_FAIL" && exit)
+cmake --build . --config Release ||
+    { printf "$BUILD_FAIL" && exit 1; }
 # Hardlink the header file to the build directory
 printf "$COPY_STR"
 ln ../include/forestry.h . || 
-    (printf "$COPY_FAIL" && exit)
+    { printf "$COPY_FAIL" && exit 1; }
 # Ask user if they want to install the library to their system
 printf "$ASK_INSTALL"
 read -r QUERY_INSTALL
 case $QUERY_INSTALL in
     y|Y) sudo cmake --install . || 
-        (printf "$INSTALL_FAIL" && exit) ;;
+        { printf "$INSTALL_FAIL" && exit 1; } ;;
     *) ;;
 esac
 # Delete build artifacts
 printf "$DEL_ART_STR"
 rm -rf ./CMakeFiles ./CMakeCache.txt ./Makefile ./cmake_install.cmake || 
-    (printf "$DEL_ART_FAIL" && exit)
+    { printf "$DEL_ART_FAIL" && exit 1; }
 # Print build success message
 printf "$BUILD_COMPLETE"
+exit 0
