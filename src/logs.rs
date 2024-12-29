@@ -55,6 +55,7 @@ impl Logger {
                 LogLevel::Error => "!".into(),
                 LogLevel::Success => "+".into(),
                 LogLevel::Critical => "%".into(),
+                LogLevel::Debug => "?".into(),
             };
         }
         if self.flags & 0b01000000 != 0 {
@@ -89,6 +90,11 @@ impl Logger {
                     sym = sym.on_red().white();
                     tim = tim.on_red().white();
                 },
+                LogLevel::Debug => {
+                    cnt = cnt.magenta();
+                    sym = sym.magenta();
+                    tim = tim.magenta();
+                }
             }
         }
         if self.flags & 0b1000 == 0 {
@@ -146,12 +152,13 @@ impl Logger {
                 LogLevel::Critical => {
                     fmt = fmt.on_red().white()
                 },
+                LogLevel::Debug => {
+                    fmt = fmt.magenta()
+                }
             }
         }
         if self.flags & 0b1000 == 0 {
             match lvl {
-                LogLevel::Info => {},
-                LogLevel::Warn => {},
                 LogLevel::Error => {
                     fmt = fmt.bold()
                 },
@@ -161,6 +168,7 @@ impl Logger {
                 LogLevel::Critical => {
                     fmt = fmt.bold()
                 },
+                _ => {},
             }
         }
         fmt.to_string()
@@ -292,7 +300,7 @@ impl Logger {
     }
 
     /**
-        Log a message,
+        Log a message.
 
         The message is logged as a CRITICAL message.
 
@@ -308,6 +316,26 @@ impl Logger {
     */
     pub fn critical(&mut self, s: &str) -> &mut Self {
         self.print(LogLevel::Critical, s)
+    }
+
+    /**
+        Log a message.
+
+        The mesage is logged as a DEBUG message.
+
+        # Arguments
+        - `s`: The message to log.
+
+        # Example
+        ```rust
+         use forestry::prelude::*;
+         let mut log = Logger::new();
+         log.debug("debug");              // Output: [0000:?] debug
+        ```
+    */
+    pub fn debug(&mut self, s: &str) -> &mut Self {
+        self.print(LogLevel::Debug, s);
+        self
     }
 
     fn print(&mut self, lvl: LogLevel, string: &str) -> &mut Self {
@@ -476,7 +504,7 @@ impl Logger {
     }
 
     /**
-        Log a message,
+        Log a message.
 
         The message is logged as a CRITICAL message.
 
@@ -492,6 +520,26 @@ impl Logger {
     */
     pub async fn critical(&mut self, s: &str) -> &mut Self {
         self.print(LogLevel::Critical, s).await;
+        self
+    }
+
+    /**
+        Log a message.
+
+        The mesage is logged as a DEBUG message.
+
+        # Arguments
+        - `s`: The message to log.
+
+        # Example
+        ```rust
+         use forestry::prelude::*;
+         let mut log = Logger::new();
+         log.debug("debug");              // Output: [0000:?] debug
+        ```
+    */
+    pub async fn debug(&mut self, s: &str) -> &mut Self {
+        self.print(LogLevel::Debug, s).await;
         self
     }
 
@@ -584,4 +632,5 @@ enum LogLevel {
     Error,
     Success,
     Critical,
+    Debug,
 }
