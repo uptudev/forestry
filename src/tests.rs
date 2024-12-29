@@ -13,7 +13,8 @@ fn logger_prints() {
         .warn("warning")
         .error("error")
         .success("success")
-        .critical("critical");
+        .critical("critical") 
+        .debug("debug");
     }
 
 #[test]
@@ -26,7 +27,8 @@ fn logger_no_header() {
         .warn("warning")
         .error("error")
         .success("success")
-        .critical("critical");
+        .critical("critical")
+        .debug("debug");
 }
 
 #[test]
@@ -39,7 +41,8 @@ fn logger_plain() {
         .warn("warning")
         .error("error")
         .success("success")
-        .critical("critical");
+        .critical("critical")
+        .debug("debug");
 }
 
 #[test]
@@ -52,7 +55,8 @@ fn logger_basic() {
         .warn("warning")
         .error("error")
         .success("success")
-        .critical("critical");
+        .critical("critical")
+        .debug("debug");
 }
 
 #[test]
@@ -65,7 +69,8 @@ fn logger_no_index() {
         .warn("warning")
         .error("error")
         .success("success")
-        .critical("critical");
+        .critical("critical")
+        .debug("debug");
 }
 
 #[test]
@@ -78,7 +83,8 @@ fn logger_no_symbol() {
         .warn("warning")
         .error("error")
         .success("success")
-        .critical("critical");
+        .critical("critical")
+        .debug("debug");
 }
 
 #[test]
@@ -91,7 +97,8 @@ fn logger_ns_nc_nb() {
         .warn("warning")
         .error("error")
         .success("success")
-        .critical("critical");
+        .critical("critical")
+        .debug("debug");
 }
 
 #[test]
@@ -104,7 +111,8 @@ fn logger_no_bold() {
         .warn("warning")
         .error("error")
         .success("success")
-        .critical("critical");
+        .critical("critical")
+        .debug("debug");
 }
 
 #[test]
@@ -117,7 +125,8 @@ fn logger_file_io() {
         .warn("warning")
         .error("error")
         .success("success")
-        .critical("critical");
+        .critical("critical")
+        .debug("debug");
 }
 
 #[test]
@@ -130,7 +139,8 @@ fn logger_file_at() {
         .warn("warning")
         .error("error")
         .success("success")
-        .critical("critical");
+        .critical("critical")
+        .debug("debug");
 }
 
 #[test]
@@ -143,7 +153,8 @@ fn logger_timer() {
         .warn("warning")
         .error("error")
         .success("success")
-        .critical("critical");
+        .critical("critical")
+        .debug("debug");
 }
 
 #[test]
@@ -156,7 +167,8 @@ fn logger_timer_at() {
         .warn("warning")
         .error("error")
         .success("success")
-        .critical("critical");
+        .critical("critical")
+        .debug("debug");
 }
 
 #[tokio::test]
@@ -169,5 +181,6 @@ async fn logger_async() {
         .warn("warning").await
         .error("error").await
         .success("success").await
-        .critical("critical").await;
+        .critical("critical").await
+        .debug("debug").await;
 }
