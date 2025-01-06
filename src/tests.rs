@@ -184,3 +184,28 @@ async fn logger_async() {
         .critical("critical").await
         .debug("debug").await;
 }
+
+#[test]
+#[cfg(feature = "static")]
+fn r#static() {
+    println!();
+    info("info");
+    warn("warn");
+    error("error");
+    success("success");
+    critical("critical");
+    debug("debug");
+}
+
+#[test]
+#[cfg(feature = "static")]
+fn r#static_cfg() {
+    println!();
+    cfg(&[Timer]);
+    info("info");
+    warn("warn");
+    error("error");
+    success("success");
+    critical("critical");
+    debug("debug");
+}

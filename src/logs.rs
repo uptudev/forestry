@@ -4,6 +4,9 @@ use std::{fs::File, io::{self, Write}};
 #[cfg(feature = "async")]
 use tokio::{fs::File, io::{self, AsyncWriteExt}};
 
+#[cfg(feature = "static")]
+pub use r#static::*;
+
 use colored::*;
 
 /**
@@ -633,4 +636,40 @@ enum LogLevel {
     Success,
     Critical,
     Debug,
+}
+
+#[allow(unused)]
+#[cfg(feature = "static")]
+mod r#static {
+    type Res = Result<(), Box<dyn std::error::Error>>;
+    static LOG: std::sync::Mutex<super::Logger> = std::sync::Mutex::new(super::Logger::new());
+
+    pub fn cfg(c: &[super::Options]) -> Res {
+        LOG.lock().unwrap().cfg(c)?;
+        Ok(())
+    }
+
+    pub fn info(s: &str) {
+        LOG.lock().unwrap().info(s);
+    }
+
+    pub fn warn(s: &str) {
+        LOG.lock().unwrap().warn(s);
+    }
+
+    pub fn error(s: &str) {
+        LOG.lock().unwrap().error(s);
+    }
+
+    pub fn success(s: &str) {
+        LOG.lock().unwrap().success(s);
+    }
+
+    pub fn debug(s: &str) {
+        LOG.lock().unwrap().debug(s);
+    }
+
+    pub fn critical(s: &str) {
+        LOG.lock().unwrap().critical(s);
+    }
 }

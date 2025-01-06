@@ -13,6 +13,7 @@ keywords = ["logging", "cli", "console", "color", "string"]
 [features]
 plain = ["colored/no-color"]
 async = ["tokio"]
+static = []
 
 [dependencies]
 colored = "2.1.0"
