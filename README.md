@@ -34,13 +34,17 @@ Forestry is a simple logging library that allows you to log messages to the cons
 ```rust
 use forestry::prelude::*;
 
-let log = Logger::new();
-log.info("This is an info message.");
-log.warn("This is a warning message.");
-log.error("This is an error message.");
-log.success("This is a success message.");
-log.critical("This is a critical message.");
+fn main() {
+    let log = Logger::new();
+    log.info("This is an info message.");
+    log.warn("This is a warning message.");
+    log.error("This is an error message.");
+    log.success("This is a success message.");
+    log.critical("This is a critical message.");
+}
 ```
+
+### Inlining
 
 These calls can also be inlined as follows
 
@@ -48,15 +52,53 @@ These calls can also be inlined as follows
 ```rust
 use forestry::prelude::*
 
-let log = Logger::new();
-log.info("This is an info message.")
-    .warn("This is a warning message.")
-    .error("This is an error message.")
-    .success("This is a success message.")
-    .critical("This is a critical message.");
+fn main() {
+    let log = Logger::new();
+    log.info("This is an info message.")
+        .warn("This is a warning message.")
+        .error("This is an error message.")
+        .success("This is a success message.")
+        .critical("This is a critical message.");
+}
 ```
 
-This will output the following to the console:
+### Static Logging
+
+Using the `static` feature allows for the following to be run on a single static `Logger` instance
+
+`src/main.rs`
+```rust
+use forestry::prelude::*;
+
+fn main() {
+    info("This is an info message.");
+    warn("This is a warning message.");
+    error("This is an error message.");
+    success("This is a success message.");
+    critical("This is a critical message.");
+}
+```
+
+This requires your `Cargo.toml` to have the feature enabled, which is available on versions after and including `1.8.0`. To do so, ensure your `Cargo.toml` has either
+
+`Cargo.toml`
+```toml
+[dependencies]
+forestry = { version = "1.8.0", features = ["static"] }
+```
+
+or
+
+`Cargo.toml`
+```toml
+[dependencies.forestry]
+version = "1.8.0"
+features = ["static"]
+```
+
+---
+
+These will all output the following to the console:
 
 ```
 [0000:*] This is an info message.
