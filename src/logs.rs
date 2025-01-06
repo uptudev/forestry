@@ -27,7 +27,7 @@ impl Logger {
       
         The logger is initialised with a log index of 0.
      */
-    pub fn new() -> Self {
+    pub const fn new() -> Self {
         Logger {
             index: 0,
             flags: 0,
