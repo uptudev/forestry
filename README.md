@@ -137,7 +137,7 @@ features = ["async"]
 
 Then, the logger's internal print calls will be asynchronous futures. This is useful for logging in async functions or in async contexts. `await`ing the logger's methods will return the same `&mut Logger` as before, so chaining is still possible (although only by adding `await` to every call).
 
-`async` is compatible with `static`, and will allow for `.await`ing on the static calls if both features are enabled.
+`async` is compatible with `static` as of version `1.9.0`, and will allow for `.await`ing on the static calls if both features are enabled.
 
 ## Contributing
 
