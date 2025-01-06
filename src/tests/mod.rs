@@ -1,4 +1,4 @@
-use super::prelude::*;
+use crate::prelude::*;
 
 #[allow(unused_imports)]
 use Options::*;
@@ -186,8 +186,9 @@ async fn logger_async() {
 }
 
 #[test]
+#[cfg(not(feature = "async"))]
 #[cfg(feature = "static")]
-fn r#static() {
+fn static_log() {
     println!();
     info("info");
     warn("warn");
@@ -198,8 +199,9 @@ fn r#static() {
 }
 
 #[test]
+#[cfg(not(feature = "async"))]
 #[cfg(feature = "static")]
-fn r#static_cfg() {
+fn static_cfg() {
     println!();
     cfg(&[Timer]);
     info("info");
@@ -208,4 +210,30 @@ fn r#static_cfg() {
     success("success");
     critical("critical");
     debug("debug");
+}
+
+#[tokio::test]
+#[cfg(feature = "static")]
+#[cfg(feature = "async")]
+async fn static_async() {
+    println!();
+    info("info").await;
+    warn("warn").await;
+    error("error").await;
+    success("success").await;
+    critical("critical").await;
+    debug("debug").await;
+}
+
+#[tokio::test]
+#[cfg(feature = "static")]
+#[cfg(feature = "async")]
+async fn static_async_two() {
+    println!();
+    info("info").await;
+    warn("warn").await;
+    error("error").await;
+    success("success").await;
+    critical("critical").await;
+    debug("debug").await;
 }

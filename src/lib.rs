@@ -20,9 +20,19 @@
 //! a file, and more.
 //! See the [logs] module for more details.
 
+// Feature modules
+#[cfg(feature = "static")]
+mod r#static;
+
+// Base modules
 pub mod logs;
+#[allow(unused)]
 pub mod prelude {
     pub use crate::logs::*;
+    #[cfg(feature = "static")]
+    pub use crate::r#static::*;
 }
+
+// Test module
 #[cfg(test)]
 mod tests;
