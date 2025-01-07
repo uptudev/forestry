@@ -364,12 +364,10 @@ impl Logger {
             plain.push_str(&self.fmt_string(lvl, string));
             plain.push('\n');
             if let Some(inner) = &mut self.file {
-                eprintln!("attempting write to file");
                 inner
                     .write(plain.as_bytes())
                     .unwrap();
                 inner.flush().unwrap();
-                eprintln!("string written: {}", plain);
             } else {
                 self.warn("File output enabled without file specified.");
             }
