@@ -20,6 +20,7 @@ mod sync {
       # Arguments
       - `opts`: an array of [Options]
       */
+    #[inline(always)]
     pub fn cfg(c: &[logs::Options]) -> Res {
         LOG.lock().unwrap().cfg(c)?;
         Ok(())
@@ -39,6 +40,7 @@ mod sync {
       info("info");        // Output: [0000:*] info
       ```
       */
+    #[inline(always)]
     pub fn info(s: &str) {
         LOG.lock().unwrap().info(s);
     }
@@ -57,6 +59,7 @@ mod sync {
       warn("warn");        // Output: [0000:~] warn
       ```
       */
+    #[inline(always)]
     pub fn warn(s: &str) {
         LOG.lock().unwrap().warn(s);
     }
@@ -75,6 +78,7 @@ mod sync {
       error("error");        // Output: [0000:!] error
       ```
       */
+    #[inline(always)]
     pub fn error(s: &str) {
         LOG.lock().unwrap().error(s);
     }
@@ -93,6 +97,7 @@ mod sync {
       success("success");        // Output: [0000:+] success
       ```
       */
+    #[inline(always)]
     pub fn success(s: &str) {
         LOG.lock().unwrap().success(s);
     }
@@ -111,6 +116,7 @@ mod sync {
       debug("debug");        // Output: [0000:?] debug
       ```
       */
+    #[inline(always)]
     pub fn debug(s: &str) {
         LOG.lock().unwrap().debug(s);
     }
@@ -129,6 +135,7 @@ mod sync {
       critical("critical");        // Output: [0000:%] critical
       ```
       */
+    #[inline(always)]
     pub fn critical(s: &str) {
         LOG.lock().unwrap().critical(s);
     }

@@ -1,4 +1,5 @@
 use crate::prelude::*;
+type Res = Result<(), Box<dyn std::error::Error>>;
 
 #[allow(unused_imports)]
 use Options::*;
@@ -19,21 +20,22 @@ fn logger_prints() {
 
 #[test]
 #[cfg(not(feature = "async"))]
-fn logger_no_header() {
+fn logger_no_header() -> Res {
     println!();
     let mut l = Logger::new();
-    l.cfg(&[NoIndex, NoSymbol]).unwrap()
+    l.cfg(&[NoIndex, NoSymbol])?
         .info("info")
         .warn("warning")
         .error("error")
         .success("success")
         .critical("critical")
         .debug("debug");
+    Ok(())
 }
 
 #[test]
 #[cfg(not(feature = "async"))]
-fn logger_plain() {
+fn logger_plain() -> Res {
     println!();
     let mut l = Logger::new();
     l.cfg(&[Plain]).unwrap()
@@ -43,11 +45,12 @@ fn logger_plain() {
         .success("success")
         .critical("critical")
         .debug("debug");
+    Ok(())
 }
 
 #[test]
 #[cfg(not(feature = "async"))]
-fn logger_basic() {
+fn logger_basic() -> Res {
     println!();
     let mut l = Logger::new();
     l.cfg(&[Basic]).unwrap()
@@ -57,11 +60,12 @@ fn logger_basic() {
         .success("success")
         .critical("critical")
         .debug("debug");
+    Ok(())
 }
 
 #[test]
 #[cfg(not(feature = "async"))]
-fn logger_no_index() {
+fn logger_no_index() -> Res {
     println!();
     let mut l = Logger::new();
     l.cfg(&[NoIndex]).unwrap()
@@ -71,11 +75,12 @@ fn logger_no_index() {
         .success("success")
         .critical("critical")
         .debug("debug");
+    Ok(())
 }
 
 #[test]
 #[cfg(not(feature = "async"))]
-fn logger_no_symbol() {
+fn logger_no_symbol() -> Res {
     println!();
     let mut l = Logger::new();
     l.cfg(&[NoSymbol]).unwrap()
@@ -85,11 +90,12 @@ fn logger_no_symbol() {
         .success("success")
         .critical("critical")
         .debug("debug");
+    Ok(())
 }
 
 #[test]
 #[cfg(not(feature = "async"))]
-fn logger_ns_nc_nb() {
+fn logger_ns_nc_nb() -> Res {
     println!();
     let mut l = Logger::new();
     l.cfg(&[NoSymbol, NoColor, NoBold]).unwrap()
@@ -99,11 +105,12 @@ fn logger_ns_nc_nb() {
         .success("success")
         .critical("critical")
         .debug("debug");
+    Ok(())
 }
 
 #[test]
 #[cfg(not(feature = "async"))]
-fn logger_no_bold() {
+fn logger_no_bold() -> Res {
     println!();
     let mut l = Logger::new();
     l.cfg(&[NoBold]).unwrap()
@@ -113,11 +120,12 @@ fn logger_no_bold() {
         .success("success")
         .critical("critical")
         .debug("debug");
+    Ok(())
 }
 
 #[test]
 #[cfg(not(feature = "async"))]
-fn logger_file_io() {
+fn logger_file_io() -> Res {
     println!();
     let mut l = Logger::new();
     l.cfg(&[File, FileOnly]).unwrap()
@@ -127,11 +135,12 @@ fn logger_file_io() {
         .success("success")
         .critical("critical")
         .debug("debug");
+    Ok(())
 }
 
 #[test]
 #[cfg(not(feature = "async"))]
-fn logger_file_at() {
+fn logger_file_at() -> Res {
     println!();
     let mut l = Logger::new();
     l.cfg(&[FileAt(&std::fs::File::create("fileat.log").unwrap()), FileOnly]).unwrap()
@@ -141,11 +150,12 @@ fn logger_file_at() {
         .success("success")
         .critical("critical")
         .debug("debug");
+    Ok(())
 }
 
 #[test]
 #[cfg(not(feature = "async"))]
-fn logger_timer() {
+fn logger_timer() -> Res {
     println!();
     let mut l = Logger::new();
     l.cfg(&[Timer]).unwrap()
@@ -155,11 +165,12 @@ fn logger_timer() {
         .success("success")
         .critical("critical")
         .debug("debug");
+    Ok(())
 }
 
 #[test]
 #[cfg(not(feature = "async"))]
-fn logger_timer_at() {
+fn logger_timer_at() -> Res {
     println!();
     let mut l = Logger::new();
     l.cfg(&[TimerAt(&std::time::Instant::now())]).unwrap()
@@ -169,6 +180,7 @@ fn logger_timer_at() {
         .success("success")
         .critical("critical")
         .debug("debug");
+    Ok(())
 }
 
 #[tokio::test]
@@ -201,15 +213,16 @@ fn static_log() {
 #[test]
 #[cfg(not(feature = "async"))]
 #[cfg(feature = "static")]
-fn static_cfg() {
+fn static_cfg() -> Res {
     println!();
-    cfg(&[Timer]);
+    cfg(&[Timer])?;
     info("info");
     warn("warn");
     error("error");
     success("success");
     critical("critical");
     debug("debug");
+    Ok(())
 }
 
 #[tokio::test]

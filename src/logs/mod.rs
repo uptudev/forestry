@@ -238,6 +238,7 @@ impl Logger {
          log.info("info");            // Output: [0000:*] info
         ```
      */
+    #[inline(always)]
     pub fn info(&mut self, s: &str) -> &mut Self {
         self.print(LogLevel::Info, s)
     }
@@ -257,6 +258,7 @@ impl Logger {
          log.warn("warn");            // Output: [0000:~] warn
         ```
      */
+    #[inline(always)]
     pub fn warn(&mut self, s: &str) -> &mut Self {
         self.print(LogLevel::Warn, s)
     }
@@ -276,6 +278,7 @@ impl Logger {
          log.error("error");           // Output: [0000:!] error
         ```
      */
+    #[inline(always)]
     pub fn error(&mut self, s: &str) -> &mut Self {
         self.print(LogLevel::Error, s)
     }
@@ -295,6 +298,7 @@ impl Logger {
          log.success("success");         // Output: [0000:+] success
         ```
      */
+    #[inline(always)]
     pub fn success(&mut self, s: &str) -> &mut Self {
         self.print(LogLevel::Success, s)
     }
@@ -314,6 +318,7 @@ impl Logger {
          log.critical("critical");        // Output: [0000:%] critical
         ```
     */
+    #[inline(always)]
     pub fn critical(&mut self, s: &str) -> &mut Self {
         self.print(LogLevel::Critical, s)
     }
@@ -333,6 +338,7 @@ impl Logger {
          log.debug("debug");              // Output: [0000:?] debug
         ```
     */
+    #[inline(always)]
     pub fn debug(&mut self, s: &str) -> &mut Self {
         self.print(LogLevel::Debug, s);
         self

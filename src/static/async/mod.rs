@@ -8,6 +8,7 @@ use super::*;
   # Arguments
   - `opts`: an array of [Options]
   */
+#[inline(always)]
 pub async fn cfg(c: &[logs::Options<'_>]) -> Res {
     LOG.lock().unwrap().cfg(c).await?;
     Ok(())
@@ -27,6 +28,7 @@ pub async fn cfg(c: &[logs::Options<'_>]) -> Res {
   info("info");        // Output: [0000:*] info
   ```
   */
+#[inline(always)]
 pub async fn info(s: &str) {
     LOG.lock().unwrap().info(s).await;
 }
@@ -45,6 +47,7 @@ pub async fn info(s: &str) {
   warn("warn");        // Output: [0000:~] warn
   ```
   */
+#[inline(always)]
 pub async fn warn(s: &str) {
     LOG.lock().unwrap().warn(s).await;
 }
@@ -63,6 +66,7 @@ pub async fn warn(s: &str) {
   error("error");        // Output: [0000:!] error
   ```
   */
+#[inline(always)]
 pub async fn error(s: &str) {
     LOG.lock().unwrap().error(s).await;
 }
@@ -81,6 +85,7 @@ pub async fn error(s: &str) {
   success("success");        // Output: [0000:+] success
   ```
   */
+#[inline(always)]
 pub async fn success(s: &str) {
     LOG.lock().unwrap().success(s).await;
 }
@@ -99,6 +104,7 @@ pub async fn success(s: &str) {
   debug("debug");        // Output: [0000:?] debug
   ```
   */
+#[inline(always)]
 pub async fn debug(s: &str) {
     LOG.lock().unwrap().debug(s).await;
 }
@@ -117,6 +123,7 @@ pub async fn debug(s: &str) {
   critical("critical");        // Output: [0000:%] critical
   ```
   */
+#[inline(always)]
 pub async fn critical(s: &str) {
     LOG.lock().unwrap().critical(s).await;
 }
