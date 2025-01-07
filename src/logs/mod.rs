@@ -2,6 +2,10 @@
 use std::{fs::File, io::{self, Write}};
 
 #[cfg(feature = "async")]
+mod r#async;
+#[cfg(feature = "async")]
+pub use r#async::*;
+#[cfg(feature = "async")]
 use tokio::{fs::File, io::{self, AsyncWriteExt}};
 
 use colored::*;
@@ -356,18 +360,18 @@ impl Logger {
             let temp = self.flags & 0b00001100;
             self.flags |= 0b00001100;
             // invoke buffered print here while formatting is temporarily plain
-            let mut plain = String::from("");
-            plain.push_str(&self.fmt_header(lvl)); 
+            let mut plain = self.fmt_header(lvl); 
             plain.push_str(&self.fmt_string(lvl, string));
             plain.push('\n');
-            if self.file.is_none() {
-                self.warn("File output enabled without file specified.");
-            } else {
-                self.file
-                    .as_mut()
-                    .unwrap()
+            if let Some(inner) = &mut self.file {
+                eprintln!("attempting write to file");
+                inner
                     .write(plain.as_bytes())
                     .unwrap();
+                inner.flush().unwrap();
+                eprintln!("string written: {}", plain);
+            } else {
+                self.warn("File output enabled without file specified.");
             }
             self.flags &= 0b11110011;
             self.flags |= temp;
@@ -380,11 +384,6 @@ impl Logger {
         self
     }
 }
-
-#[cfg(feature = "async")]
-mod r#async;
-#[cfg(feature = "async")]
-pub use r#async::*;
 
 /**
     Formatting options for the `Logger`.

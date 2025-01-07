@@ -20,9 +20,8 @@ mod sync {
       # Arguments
       - `opts`: an array of [Options]
       */
-    #[inline(always)]
     pub fn cfg(c: &[logs::Options]) -> Res {
-        LOG.lock().unwrap().cfg(c)?;
+        LOG.lock()?.cfg(c)?;
         Ok(())
     }
 

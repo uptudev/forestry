@@ -1,7 +1,6 @@
 use tokio::{fs::File, io::{self, AsyncWriteExt}};
 use super::*;
 
-#[cfg(feature = "async")]
 impl Logger {
     /**
       Configure the logger with options.
@@ -191,15 +190,15 @@ impl Logger {
             plain.push_str(&self.fmt_header(lvl)); 
             plain.push_str(&self.fmt_string(lvl, string));
             plain.push('\n');
-            if self.file.is_none() {
-                eprintln!("File output enabled without file specified.");
-            } else {
-                self.file
-                    .as_mut()
-                    .unwrap()
+            if let Some(inner) = &mut self.file {
+                inner
                     .write(plain.as_bytes())
                     .await
                     .unwrap();
+                inner.flush().await.unwrap();
+
+            } else {
+                eprintln!("File output enabled without file specified.");
             }
             self.flags &= 0b11110011;
             self.flags |= temp;

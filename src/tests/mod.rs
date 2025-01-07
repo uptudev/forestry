@@ -225,6 +225,22 @@ fn static_cfg() -> Res {
     Ok(())
 }
 
+#[test]
+#[cfg(not(feature = "async"))]
+#[cfg(feature = "static")]
+fn static_file() -> Res {
+    println!();
+    cfg(&[Reset, FileAt(&std::fs::File::create("static.log")?)])?;
+    info("info");
+    warn("warn");
+    error("error");
+    success("success");
+    critical("critical");
+    debug("debug");
+    cfg(&[Reset])?;
+    Ok(())
+}
+
 #[tokio::test]
 #[cfg(feature = "static")]
 #[cfg(feature = "async")]
@@ -241,12 +257,15 @@ async fn static_async() {
 #[tokio::test]
 #[cfg(feature = "static")]
 #[cfg(feature = "async")]
-async fn static_async_two() {
+async fn async_io() -> Res {
     println!();
+    cfg(&[Reset, FileAt(&tokio::fs::File::create("async.log").await?)]).await?;
     info("info").await;
     warn("warn").await;
     error("error").await;
     success("success").await;
     critical("critical").await;
     debug("debug").await;
+    cfg(&[Reset]).await?;
+    Ok(())
 }
