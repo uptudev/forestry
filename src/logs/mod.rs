@@ -349,20 +349,17 @@ impl Logger {
     }
 
     fn print(&mut self, lvl: LogLevel, string: &str) -> &mut Self {
+        let mut s: String = self.fmt_header(lvl);
+        s.push_str(&self.fmt_string(lvl, string));
+        s.push('\n');
         if self.flags & 0b00100000 == 0 {
-            let mut s: String = self.fmt_header(lvl);
-            s.push_str(&self.fmt_string(lvl, string));
-            s.push('\n');
             io::stderr().write_all(s.as_bytes()).unwrap();
         }
 
         if self.flags & 0b00010000 != 0 {
             let temp = self.flags & 0b00001100;
             self.flags |= 0b00001100;
-            // invoke buffered print here while formatting is temporarily plain
-            let mut plain = self.fmt_header(lvl); 
-            plain.push_str(&self.fmt_string(lvl, string));
-            plain.push('\n');
+            let plain = ansi_strip(&s);
             if let Some(inner) = &mut self.file {
                 inner
                     .write(plain.as_bytes())
@@ -375,9 +372,11 @@ impl Logger {
             self.flags |= temp;
         }
 
-        self.index = self.index.wrapping_add(1);
-        if self.index == 0 {
-            self.warn("Log index overflowed; log index may be inaccurate.");
+        if self.flags & 0b00000001 == 0 {
+            self.index = self.index.wrapping_add(1);
+            if self.index == 0 {
+                self.warn("Log index overflowed; log index may be inaccurate.");
+            }
         }
         self
     }
@@ -435,4 +434,22 @@ enum LogLevel {
     Success,
     Critical,
     Debug,
+}
+
+fn ansi_strip(s: &str) -> String {
+    if !s.contains("\x1b[") { return s.to_owned() }
+    let mut chars = s.chars();
+    let mut buf = String::new();
+    while let Some(c) = chars.next() {
+        match c {
+            '\x1b' => {
+                // consume up to and including the next 'm'
+                while let Some(ch) = chars.next() {
+                    if ch == 'm' {break;}
+                }
+            }
+            _ => buf.push(c),
+        }
+    }
+    buf
 }
