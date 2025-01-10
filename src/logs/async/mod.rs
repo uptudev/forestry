@@ -175,10 +175,11 @@ impl Logger {
     }
 
     async fn print(&mut self, lvl: LogLevel, string: &str) -> &mut Self {
+        let mut s: String = self.fmt_header(lvl);
+        s.push_str(&self.fmt_string(lvl, string));
+        s.push('\n');
+
         if self.flags & 0b00100000 == 0 {
-            let mut s: String = self.fmt_header(lvl);
-            s.push_str(&self.fmt_string(lvl, string));
-            s.push('\n');
             io::stderr().write_all(s.as_bytes()).await.unwrap();
         }
 
@@ -186,10 +187,7 @@ impl Logger {
             let temp = self.flags & 0b00001100;
             self.flags |= 0b00001100;
             // invoke buffered print here while formatting is temporarily plain
-            let mut plain = String::from("");
-            plain.push_str(&self.fmt_header(lvl)); 
-            plain.push_str(&self.fmt_string(lvl, string));
-            plain.push('\n');
+            let mut plain = ansi_strip(&s);
             if let Some(inner) = &mut self.file {
                 inner
                     .write(plain.as_bytes())
@@ -204,9 +202,11 @@ impl Logger {
             self.flags |= temp;
         }
 
-        self.index = self.index.wrapping_add(1);
-        if self.index == 0 {
-            eprintln!("Log index overflowed; log index may be inaccurate.");
+        if self.flags & 0b00000001 == 0 {
+            self.index = self.index.wrapping_add(1);
+            if self.index == 0 {
+                eprintln!("Log index overflowed; log index may be inaccurate.");
+            }
         }
         self
     }
