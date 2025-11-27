@@ -31,10 +31,16 @@ impl Logger {
       
         The logger is initialised with a log index of 0.
      */
-    pub const fn new() -> Self {
+    pub fn new() -> Self {
+        let mut flags = 0;
+        if let Some(support) = supports_color::on(supports_color::Stream::Stderr) {
+            if support.has_256 {
+                flags |= 0b00001100;
+            }
+        }
         Logger {
             index: 0,
-            flags: 0,
+            flags,
             file: None,
             timer: None,
         }

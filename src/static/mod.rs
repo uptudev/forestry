@@ -1,6 +1,8 @@
+use std::sync::{Mutex, LazyLock};
+
 use super::*;
 type Res = Result<(), Box<dyn std::error::Error>>;
-static LOG: std::sync::Mutex<logs::Logger> = std::sync::Mutex::new(logs::Logger::new());
+static LOG: Mutex<LazyLock<logs::Logger, fn() -> logs::Logger>> = Mutex::new(LazyLock::new(|| logs::Logger::new()));
 
 #[cfg(not(feature = "async"))]
 pub use sync::*;
