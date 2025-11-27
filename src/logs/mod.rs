@@ -34,7 +34,7 @@ impl Logger {
     pub fn new() -> Self {
         let mut flags = 0;
         if let Some(support) = supports_color::on(supports_color::Stream::Stderr) {
-            if support.has_256 {
+            if !support.has_256 {
                 flags |= 0b00001100;
             }
         }
