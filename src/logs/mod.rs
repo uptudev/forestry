@@ -8,7 +8,7 @@ pub use r#async::*;
 #[cfg(feature = "async")]
 use tokio::{fs::File, io::{self, AsyncWriteExt}};
 
-use colored::*;
+use textfmt::*;
 
 /**
     A simple logger for an application.
@@ -51,9 +51,9 @@ impl Logger {
         if self.flags & 0b01000011 == 0b00000011 {
             return "".to_string();
         }
-        let mut cnt: ColoredString = "".into();
-        let mut sym: ColoredString = "".into();
-        let mut tim: ColoredString = "".into();
+        let mut cnt: FmtText = "".into();
+        let mut sym: FmtText = "".into();
+        let mut tim: FmtText = "".into();
 
         if self.flags & 0b0001 == 0 {
             cnt = format!("{:0>4x}", self.index).into();
@@ -96,9 +96,9 @@ impl Logger {
                     tim = tim.green();
                 },
                 LogLevel::Critical => {
-                    cnt = cnt.on_red().white();
-                    sym = sym.on_red().white();
-                    tim = tim.on_red().white();
+                    cnt = cnt.bg_red().white();
+                    sym = sym.bg_red().white();
+                    tim = tim.bg_red().white();
                 },
                 LogLevel::Debug => {
                     cnt = cnt.magenta();
@@ -144,7 +144,7 @@ impl Logger {
     }
 
     fn fmt_string(&self, lvl: LogLevel, s: &str) -> String {
-        let mut fmt: ColoredString = s.into();
+        let mut fmt: FmtText = s.into();
         if self.flags & 0b0100 == 0 {
             match lvl {
                 LogLevel::Info => {
@@ -160,7 +160,7 @@ impl Logger {
                     fmt = fmt.green()
                 },
                 LogLevel::Critical => {
-                    fmt = fmt.on_red().white()
+                    fmt = fmt.bg_red().white()
                 },
                 LogLevel::Debug => {
                     fmt = fmt.magenta()

@@ -11,15 +11,14 @@ readme = "README.md"
 keywords = ["logging", "cli", "console", "color", "string"]
 
 [features]
-plain = ["colored/no-color"]
 async = ["tokio"]
 static = []
 
 [dependencies]
-colored = "2.1.0"
+textfmt = "1.1.0"
 supports-color = "3.0.2"
 
 [dependencies.tokio]
 version = "1.41"
-features = ["rt","io-std", "io-util", "fs", "macros"]
+features = ["rt", "io-std", "io-util", "fs", "macros"]
 optional = true
