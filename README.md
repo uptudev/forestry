@@ -24,11 +24,14 @@ cargo add forestry
 
 ## Dependencies
 
-Forestry depends on the `colored` crate for colorized output.
+Forestry depends on the `textfmt` crate for colorized output as well as the `supports-color` 
+crate. If the `async` feature is enabled, it also depends on the `tokio` crate
+for an async runtime
 
 ## Usage
 
-Forestry is a simple logging library that allows you to log messages to the console with different levels of severity. Here's an example of how to use it:
+Forestry is a simple logging library that allows you to log messages to the console 
+with different levels of severity. Here's an example of how to use it:
 
 `src/main.rs`
 ```rust
@@ -64,7 +67,8 @@ fn main() {
 
 ### Static Logging
 
-Using the `static` feature allows for the following to be run on a single static `Logger` instance
+Using the `static` feature allows for the following to be run on a single static 
+`Logger` instance
 
 `src/main.rs`
 ```rust
@@ -79,7 +83,8 @@ fn main() {
 }
 ```
 
-This requires your `Cargo.toml` to have the feature enabled, which is available on versions after and including `1.8.0`. To do so, ensure your `Cargo.toml` has either
+This requires your `Cargo.toml` to have the feature enabled, which is available 
+on versions after and including `1.8.0`. To do so, ensure your `Cargo.toml` has either
 
 `Cargo.toml`
 ```toml
@@ -110,15 +115,20 @@ These will all output the following to the console:
 
 It will also be coloured in most terminals.
 
-All formatting is optional; please see the documentation at [Docs.rs](https://docs.rs/forestry/latest/forestry/index.html), specifically for `crate::logs::Options`. Optional file output and timer inclusion is also supported via the same `crate::logs::Options` enum.
+All formatting is optional; please see the documentation at 
+[Docs.rs](https://docs.rs/forestry/latest/forestry/index.html), 
+specifically for `crate::logs::Options`. Optional file output and timer inclusion 
+is also supported via the same `crate::logs::Options` enum.
 
 ### Async
 
-Forestry also supports asynchronous logging. To enable this feature, simply add the `async` feature to `forestry`'s declaration in your `Cargo.toml` file.
+Forestry also supports asynchronous logging. To enable this feature, simply add 
+the `async` feature to `forestry`'s declaration in your `Cargo.toml` file.
 
 #### Example
 
-First, add the `async` feature to `forestry` in your `Cargo.toml` file by changing the default declaration to either of the following:
+First, add the `async` feature to `forestry` in your `Cargo.toml` file by changing 
+the default declaration to either of the following:
 
 `Cargo.toml`
 ```toml
@@ -135,14 +145,20 @@ version = ">=1.5"
 features = ["async"]
 ```
 
-Then, the logger's internal print calls will be asynchronous futures. This is useful for logging in async functions or in async contexts. `await`ing the logger's methods will return the same `&mut Logger` as before, so chaining is still possible (although only by adding `await` to every call).
+Then, the logger's internal print calls will be asynchronous futures. This is useful 
+for logging in async functions or in async contexts. `await`ing the logger's methods 
+will return the same `&mut Logger` as before, so chaining is still possible (although 
+only by adding `await` to every call).
 
-`async` is compatible with `static` as of version `1.9.0`, and will allow for `.await`ing on the static calls if both features are enabled.
+`async` is compatible with `static` as of version `1.9.0`, and will allow for `.await`ing 
+on the static calls if both features are enabled.
 
 ## Contributing
 
-If you would like to contribute to forestry, please open an issue or submit a pull request.
+If you would like to contribute to forestry, please open an issue or submit a pull 
+request.
 
 ## License
 
-This code is dual-licensed under either the MIT or Apache 2.0 license, at your option. Please see the `LICENSE` file for more information.
+This code is dual-licensed under either the MIT or Apache 2.0 license, at your option. 
+Please see the `LICENSE` file for more information.
